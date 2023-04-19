@@ -213,3 +213,10 @@ main img {
 .account li {
   @apply flex p-4 border bg-gray-300 rounded-sm hover:scale-110 transition-all cursor-pointer;
 }
+
+/*************************************************** mail ****************************************************/
+
+.mail input,
+.mail textarea {
+  @apply focus:outline-none;
+}

@@ -31,7 +31,7 @@ const Mail = () => {
   };
 
   return (
-    <div className="bg-blue-200 md:max-w-full lg:max-w-[60%] m-auto mt-20 p-10">
+    <div className="bg-gradient-to-l from-cyan-500 to-blue-500 md:max-w-full lg:max-w-[60%] m-auto mt-20 p-10">
       <div className="flex">
         <Link to="/" className="bg-gray-200 p-3 rounded-md">
           <BsArrowBarLeft />
@@ -40,7 +40,7 @@ const Mail = () => {
       <form
         ref={form}
         onSubmit={sendEmail}
-        className="flex flex-col gap-1 m-auto max-w-[60%]"
+        className="mail flex flex-col gap-1 m-auto sm:max-w-[60%]"
       >
         <label htmlFor="name">Your name</label>
         <input
