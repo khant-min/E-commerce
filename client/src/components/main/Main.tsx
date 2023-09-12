@@ -1,5 +1,5 @@
 import { Tilt } from "react-tilt";
-import useAuth from "../../hooks/useAuth";
+import { useAuth } from "../../context/DataContext";
 import { Data, DataContextProps } from "../../data.types";
 import { BiDollar } from "react-icons/bi";
 import Loading from "./Loading";
@@ -16,7 +16,7 @@ const Main = () => {
   })();
 
   const filteredResult = data.filter(
-    (cur) =>
+    cur =>
       cur.title.toLowerCase().includes(searchItem) &&
       cur.category.toLowerCase().includes(filteredByCategory)
   );

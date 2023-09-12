@@ -6,6 +6,9 @@ import Profile from "./components/header/Profile";
 import Account from "./components/header/Account";
 import Mail from "./components/mail/Mail";
 import Detail from "./components/main/Detail";
+import Drawer from "react-modern-drawer";
+import "react-modern-drawer/dist/index.css";
+import { useState } from "react";
 
 const App = () => {
   return (

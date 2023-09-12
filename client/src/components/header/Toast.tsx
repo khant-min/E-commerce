@@ -1,11 +1,6 @@
-// icons
 import { VscChromeClose } from "react-icons/vsc";
-
-// custom hooks and types
-import useAuth from "../../hooks/useAuth";
+import { useAuth } from "../../context/DataContext";
 import { DataContextProps } from "../../data.types";
-
-// components
 import SearchBox from "./SearchBox";
 import MenuBox from "./MenuBox";
 

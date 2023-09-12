@@ -1,8 +1,5 @@
-// icons
 import { ImSearch } from "react-icons/im";
-
-// custom hooks and types
-import useAuth from "../../hooks/useAuth";
+import { useAuth } from "../../context/DataContext";
 import { DataContextProps } from "../../data.types";
 
 //components

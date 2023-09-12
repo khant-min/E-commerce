@@ -1,6 +1,6 @@
 import axios from "../../../api/axios";
 import { useState, useRef, useEffect } from "react";
-import useAuth from "../../../hooks/useAuth";
+import { useAuth } from "../../../context/DataContext";
 import { DataContextProps } from "../../../data.types";
 
 const LOGIN_URL = "/login";
