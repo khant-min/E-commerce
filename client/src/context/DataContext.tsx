@@ -1,9 +1,6 @@
-// imports from react
-import { createContext, useState, useEffect } from "react";
-import axios from "axios";
-
-// types
+import { createContext, useState, useEffect, useMemo, useContext } from "react";
 import { DataProviderProps, Data, DataContextProps } from "../data.types";
+import axios from "axios";
 
 const DataContext = createContext<DataContextProps | null>(null);
 
@@ -30,31 +27,32 @@ export const DataProvider = ({ children }: DataProviderProps) => {
     })();
   }, []);
 
-  return (
-    <DataContext.Provider
-      value={{
-        isLoading,
-        data,
-        setData,
-        searchItem,
-        setSearchItem,
-        filteredByCategory,
-        setFilteredByCategory,
-        isMobileSearch,
-        setIsMobileSearch,
-        isMobileMenu,
-        setIsMobileMenu,
-        detailId,
-        setDetailId,
-        authName,
-        setAuthName,
-      }}
-    >
-      {children}
-    </DataContext.Provider>
+  const value = useMemo(
+    () => ({
+      isLoading,
+      data,
+      setData,
+      searchItem,
+      setSearchItem,
+      filteredByCategory,
+      setFilteredByCategory,
+      isMobileSearch,
+      setIsMobileSearch,
+      isMobileMenu,
+      setIsMobileMenu,
+      detailId,
+      setDetailId,
+      authName,
+      setAuthName,
+    }),
+    [data]
   );
+
+  return <DataContext.Provider value={value}>{children}</DataContext.Provider>;
 };
 
+export const useAuth = () => useContext(DataContext)
 export default DataContext;
+
 
 // remember to use auth as another context using useReducer hook!!!

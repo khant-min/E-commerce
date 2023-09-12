@@ -1,4 +1,4 @@
-import useAuth from "../../hooks/useAuth";
+import { useAuth } from "../../context/DataContext";
 import { DataContextProps } from "../../data.types";
 
 const SearchBox = () => {

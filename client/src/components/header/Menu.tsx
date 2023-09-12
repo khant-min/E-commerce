@@ -1,11 +1,6 @@
-// icons
 import { HiMenuAlt1 } from "react-icons/hi";
-
-// custom hooks and types
-import useAuth from "../../hooks/useAuth";
+import { useAuth } from "../../context/DataContext";
 import { DataContextProps } from "../../data.types";
-
-// components
 import MenuBox from "./MenuBox";
 
 const Menu = () => {

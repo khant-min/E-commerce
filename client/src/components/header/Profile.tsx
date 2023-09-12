@@ -3,7 +3,7 @@ import { AiFillWarning } from "react-icons/ai";
 import { BsArrowBarLeft } from "react-icons/bs";
 import axios from "../../api/axios";
 import { useState } from "react";
-import useAuth from "../../hooks/useAuth";
+import { useAuth } from "../../context/DataContext";
 import { DataContextProps } from "../../data.types";
 
 const LOGOUT_URL = "/logout";
