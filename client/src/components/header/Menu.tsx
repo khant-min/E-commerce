@@ -1,6 +1,6 @@
 import { HiMenuAlt1 } from "react-icons/hi";
 import { useAuth } from "../../context/DataContext";
-import { DataContextProps } from "../../data.types";
+import { DataContextProps } from "../../types";
 import MenuBox from "./MenuBox";
 
 const Menu = () => {

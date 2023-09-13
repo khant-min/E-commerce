@@ -4,7 +4,7 @@ import { BsArrowBarLeft } from "react-icons/bs";
 import axios from "../../api/axios";
 import { useState } from "react";
 import { useAuth } from "../../context/DataContext";
-import { DataContextProps } from "../../data.types";
+import { DataContextProps } from "../../types";
 
 const LOGOUT_URL = "/logout";
 

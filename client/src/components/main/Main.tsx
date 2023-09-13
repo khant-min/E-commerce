@@ -1,6 +1,6 @@
 import { Tilt } from "react-tilt";
 import { useAuth } from "../../context/DataContext";
-import { Data, DataContextProps } from "../../data.types";
+import { Data, DataContextProps } from "../../types";
 import { BiDollar } from "react-icons/bi";
 import Loading from "./Loading";
 

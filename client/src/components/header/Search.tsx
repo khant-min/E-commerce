@@ -1,6 +1,6 @@
 import { ImSearch } from "react-icons/im";
 import { useAuth } from "../../context/DataContext";
-import { DataContextProps } from "../../data.types";
+import { DataContextProps } from "../../types";
 
 //components
 import SearchBox from "./SearchBox";

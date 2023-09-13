@@ -1,5 +1,5 @@
 import { useAuth } from "../../context/DataContext";
-import { DataContextProps } from "../../data.types";
+import { DataContextProps } from "../../types";
 
 const SearchBox = () => {
   const { searchItem, setSearchItem } = useAuth() as DataContextProps;
