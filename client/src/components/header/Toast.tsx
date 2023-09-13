@@ -1,6 +1,6 @@
 import { VscChromeClose } from "react-icons/vsc";
 import { useAuth } from "../../context/DataContext";
-import { DataContextProps } from "../../data.types";
+import { DataContextProps } from "../../types";
 import SearchBox from "./SearchBox";
 import MenuBox from "./MenuBox";
 
