@@ -1,4 +1,4 @@
-import express, { Request, Response } from "express";
+import express from "express";
 
 const app = express();
 const router = express.Router({ mergeParams: true });
