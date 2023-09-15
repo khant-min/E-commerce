@@ -11,9 +11,11 @@ datasource db {
 }
 
 model User {
-  id Int @id @default(autoincrement())
-  name String
-  email String 
-  address String
-  password  String @db.VarChar(20)
+  id          Int      @id @default(autoincrement())
+  name        String   @db.VarChar(20)
+  email       String   @unique @db.VarChar(25)
+  password    String  
+  isAdmin     Boolean  @default(false)
+  phoneNumber String   @unique @db.VarChar(15)
+  createdAt   DateTime @default(now())
 }
