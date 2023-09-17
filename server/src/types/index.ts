@@ -4,3 +4,9 @@ export interface UserProps {
   password: string;
   phoneNumber: string;
 }
+
+export interface ProductProps {
+  name: string;
+  brand: string;
+  category: string;
+}

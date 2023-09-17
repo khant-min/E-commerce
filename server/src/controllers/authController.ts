@@ -9,7 +9,7 @@ export const registerCustomer = async (req: Request, res: Response) => {
   if (!name || !email || !password || !phoneNumber)
     return res.status(400).json({ message: "Please filled required fields" });
 
-  const findExistingUser = await prisma.user.findFirst({
+  const findExistingUser = await prisma.customer.findFirst({
     where: {
       OR: [{ email }, { phoneNumber }],
     },
@@ -22,7 +22,7 @@ export const registerCustomer = async (req: Request, res: Response) => {
   const hashPassword = await bcrypt.hash(password, salt);
   console.log("reach here", hashPassword);
 
-  const user = await prisma.user.create({
+  const user = await prisma.customer.create({
     data: { name, email, password: hashPassword, phoneNumber },
   });
 
@@ -34,7 +34,7 @@ export const loginCustomer = async (req: Request, res: Response) => {
   if (!email || !password)
     return res.status(400).json({ message: "Please filled required fields" });
 
-  const foundUser = await prisma.user.findFirst({ where: { email } });
+  const foundUser = await prisma.customer.findFirst({ where: { email } });
 
   if (!foundUser)
     return res.status(401).json({ message: "Credentials are invalid" });
