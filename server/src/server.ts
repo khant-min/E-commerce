@@ -1,6 +1,7 @@
 import express from "express";
 import authRoute from "./routes/authRoute";
 import root from "./routes/root";
+import productRoute from "./routes/productRoute";
 import { PrismaClient } from "@prisma/client";
 const prisma = new PrismaClient();
 
@@ -13,14 +14,14 @@ app.use(express.json());
 
 app.use("/", root);
 
+// Note -> need to create error handling functions
+
 router.use("/auth", authRoute);
+router.use("/products", productRoute);
 
 app.use("/api", router);
-
-app.use(async () => {
-  console.log("connection closed...");
-
-  await prisma.$disconnect();
+app.use("*", (req, res) => {
+  res.send("404 | Not Found");
 });
 
 const server = app.listen(PORT, () =>
