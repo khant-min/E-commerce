@@ -1,70 +1,100 @@
 import { Request, Response } from "express";
 import { ProductProps } from "../types";
 import { PrismaClient } from "@prisma/client";
+import asyncHandler from "../middleware/asyncHandler";
+import ErrorResponse from "../utils/errorResponse";
 const prisma = new PrismaClient();
 
-export const getAllProducts = async (req: Request, res: Response) => {
+/**
+ * Get All Products
+ * @route GET api/products
+ * @access public (All)
+ * @retunr all products
+ */
+export const getAllProducts = asyncHandler(async (req, res, next) => {
   const products = await prisma.product.findMany();
   res.status(200).json(products);
-};
+});
 
-export const createProduct = async (req: Request, res: Response) => {
+/**
+ * Get A Product Customer Choose
+ * @route POST api/products/secure
+ * @access private (Admin)
+ * @returns successful message
+ */
+export const createProduct = asyncHandler(async (req, res, next) => {
   const { name, brand, category }: ProductProps = req.body;
 
   if (!name || !brand || !category)
-    return res.status(400).json({ message: "Please fill all required fields" });
+    return next(new ErrorResponse("Please fill all required fields", 400));
 
-  const createdProduct = await prisma.product.create({
+  await prisma.product.create({
     data: { name, brand, category },
   });
 
-  res.status(201).json(createdProduct);
-};
+  res.status(201).json({ message: "New product created successfully" });
+});
 
-export const updateProduct = async (req: Request, res: Response) => {
+/**
+ * Update A Product Admin Choose
+ * @route PUT api/products/secure
+ * @access private (Admin)
+ * @returns successful message
+ */
+export const updateProduct = asyncHandler(async (req, res, next) => {
   const { id, name, brand, category }: ProductProps & { id: number } = req.body;
 
-  if (!id) return res.status(400).json({ message: "Product ID is required" });
+  if (!id) return next(new ErrorResponse("Product ID is required", 400));
 
   const product = await prisma.product.findUnique({ where: { id } });
-  if (!product) return res.status(404).json({ message: "Product not found" });
+  if (!product) return next(new ErrorResponse("Product not found", 404));
 
   if (name === undefined || name.trim() === "") {
-    return res.status(400).json({ message: "Name is required" });
+    return next(new ErrorResponse("Name is required", 400));
   }
 
-  const updatedProduct = await prisma.product.update({
+  await prisma.product.update({
     where: { id: product.id },
     data: { name, brand, category },
   });
 
-  res.status(201).json({ updatedProduct });
-};
+  res.status(200).json({ message: "Product updated successfully" });
+});
 
-export const deleteProduct = async (req: Request, res: Response) => {
+/**
+ * Delete A Product Admin Choose
+ * @route DELETE api/products/secure
+ * @access private (Admin)
+ */
+export const deleteProduct = asyncHandler(async (req, res, next) => {
   const { id }: { id: number } = req.body;
-  if (!id) return res.status(400).json({ message: "Product ID is required" });
+  if (!id) return next(new ErrorResponse("Product ID is required", 400));
 
   const product = await prisma.product.findUnique({ where: { id } });
-  if (!product)
-    return res.status(404).json({ message: "Product isn't existed" });
+  if (!product) return next(new ErrorResponse("Product isn't existed", 404));
 
-  const deleteProduct = await prisma.product.delete({ where: { id } });
+  await prisma.product.delete({ where: { id } });
 
-  res.status(200).json(deleteProduct);
-};
+  res.sendStatus(204);
+});
 
-export const getAProduct = async (req: Request, res: Response) => {
+/**
+ * Get A Product Customer Choose
+ * @route GET api/products/:id
+ * @access public (All)
+ * @returns chosen product
+ */
+export const getAProduct = asyncHandler(async (req, res, next) => {
   const { id } = req.params;
 
-  if (!id) return res.status(404).json({ message: "Product not found" });
+  if (!id) return next(new ErrorResponse("Product not found", 404));
 
   const product = await prisma.product.findUnique({
     where: { id: Number(id) },
   });
 
   if (product === null)
-    return res.status(400).json({ message: "Invalid product ID" });
+    return next(new ErrorResponse("Invalid product ID", 400));
 
   res.status(200).json(product);
-};
+});

@@ -2,9 +2,10 @@ import express from "express";
 import authRoute from "./routes/authRoute";
 import root from "./routes/root";
 import productRoute from "./routes/productRoute";
+import errorHandler from "./middleware/errorHandler";
 import { PrismaClient } from "@prisma/client";
-const prisma = new PrismaClient();
 
+const prisma = new PrismaClient();
 const app = express();
 const router = express.Router({ mergeParams: true });
 
@@ -14,15 +15,13 @@ app.use(express.json());
 
 app.use("/", root);
 
-// Note -> need to create error handling functions
-
 router.use("/auth", authRoute);
 router.use("/products", productRoute);
 
 app.use("/api", router);
-app.use("*", (req, res) => {
-  res.send("404 | Not Found");
-});
+app.use("*", (req, res) => res.status(404).send("404 | Not Found"));
+
+app.use(errorHandler);
 
 const server = app.listen(PORT, () =>
   console.log(`Server is running at port -> ${PORT}`)
