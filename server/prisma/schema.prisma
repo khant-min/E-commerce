@@ -10,17 +10,32 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+enum Role {
+  CUSTOMER
+  ADMIN
+}
+
 model Customer {
   id           Int           @id @default(autoincrement())
   name         String        @db.VarChar(20)
   email        String        @unique @db.VarChar(25)
   password     String        @db.VarChar(100)
-  isAdmin      Boolean       @default(false)
+  role         Role          @default(CUSTOMER)
   phoneNumber  String        @unique @db.VarChar(15)
   product      Product[]
   shoppingCart ShoppingCart?
+  profile      Profile?
+  refreshToken String        @default("")
   createdAt    DateTime      @default(now())
   updatedAt    DateTime      @updatedAt
+}
+
+// unconfirm table
+model Profile {
+  id         Int      @id @default(autoincrement())
+  bio        String   @db.VarChar(100)
+  customer   Customer @relation(fields: [customerId], references: [id])
+  customerId Int      @unique
 }
 
 model Product {
@@ -40,16 +55,16 @@ model ShoppingCart {
   productId  Int
   customer   Customer @relation(fields: [customerId], references: [id])
   customerId Int      @unique
-  updatedAt  DateTime @updatedAt
 }
 
 model Admin {
-  id          Int      @id @default(autoincrement())
-  name        String   @db.VarChar(20)
-  email       String   @unique @db.VarChar(25)
-  password    String   @db.VarChar(100)
-  isAdmin     Boolean  @default(false)
-  phoneNumber String   @unique @db.VarChar(15)
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
+  id           Int      @id @default(autoincrement())
+  name         String   @db.VarChar(20)
+  email        String   @unique @db.VarChar(25)
+  password     String   @db.VarChar(100)
+  role         Role     @default(ADMIN)
+  phoneNumber  String   @unique @db.VarChar(15)
+  refreshToken String   @default("")
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
 }

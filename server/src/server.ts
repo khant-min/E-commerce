@@ -1,11 +1,11 @@
 import express from "express";
+import prisma from "./utils/prisma";
 import authRoute from "./routes/authRoute";
 import root from "./routes/root";
 import productRoute from "./routes/productRoute";
 import errorHandler from "./middleware/errorHandler";
-import { PrismaClient } from "@prisma/client";
+import { authenticateToken } from "./middleware/authHandler";
 
-const prisma = new PrismaClient();
 const app = express();
 const router = express.Router({ mergeParams: true });
 
@@ -14,9 +14,13 @@ const PORT = process.env.PORT || 8080;
 app.use(express.json());
 
 app.use("/", root);
+app.use("/auth", authRoute);
 
-router.use("/auth", authRoute);
+// protected routes
+router.use(authenticateToken);
+
 router.use("/products", productRoute);
+// router.use("/products", (req, res) => res.send("products"));
 
 app.use("/api", router);
 app.use("*", (req, res) => res.status(404).send("404 | Not Found"));
