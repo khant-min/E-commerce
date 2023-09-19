@@ -1,9 +1,8 @@
 import { Request, Response } from "express";
 import { ProductProps } from "../types";
-import { PrismaClient } from "@prisma/client";
 import asyncHandler from "../middleware/asyncHandler";
 import ErrorResponse from "../utils/errorResponse";
-const prisma = new PrismaClient();
+import prisma from "../utils/prisma";
 
 /**
  * Get All Products

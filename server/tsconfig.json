@@ -8,6 +8,7 @@
     "outDir": "dist",
     "strict": true,
     "lib": ["ESNext"],
+    "types": ["./src/data.d.ts"],
     "esModuleInterop": true
   },
   "include": ["src/**/*"]
