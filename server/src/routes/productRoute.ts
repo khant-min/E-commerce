@@ -4,7 +4,7 @@ import * as productController from "../controllers/productController";
 const router = Router();
 
 // all user
-router.get("/all", productController.getAllProducts);
+router.get("/", productController.getAllProducts);
 router.get("/:id", productController.getAProduct);
 
 // admin

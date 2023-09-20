@@ -5,6 +5,7 @@ import root from "./routes/root";
 import productRoute from "./routes/productRoute";
 import errorHandler from "./middleware/errorHandler";
 import { authenticateToken } from "./middleware/authHandler";
+import cookieParser from "cookie-parser";
 
 const app = express();
 const router = express.Router({ mergeParams: true });
@@ -12,6 +13,7 @@ const router = express.Router({ mergeParams: true });
 const PORT = process.env.PORT || 8080;
 
 app.use(express.json());
+app.use(cookieParser());
 
 app.use("/", root);
 app.use("/auth", authRoute);
