@@ -73,7 +73,14 @@ export const loginCustomer = asyncHandler(async (req, res, next) => {
     data: { refreshToken },
   });
 
-  res.status(200).json({ accessToken, refreshToken });
+  res.cookie("jwt", refreshToken, {
+    // httpOnly: true,
+    // secure: true,
+    // sameSite: "none",
+    // maxAge: 24 * 60 * 60 * 1000,
+  });
+
+  res.status(200).json(accessToken);
 });
 
 /**
@@ -106,28 +113,31 @@ export const logoutAdmin = asyncHandler(async (req, res, next) => {});
  * @access public (All)
  */
 export const refreshToken = asyncHandler(async (req, res, next) => {
-  const { refreshToken } = req.body;
-  if (refreshToken == null)
-    return next(new ErrorResponse("Unauthoirzed!", 401));
+  const cookies = req.cookies;
+  console.log("cookies", cookies);
+  if (!cookies?.jwt) return next(new ErrorResponse("Unauthorized", 401));
+  const refreshToken = cookies.jwt;
 
-  const verifyToken = await prisma.customer.findFirst({
+  const foundUser = await prisma.customer.findFirst({
     where: { refreshToken },
   });
-  if (!verifyToken) return next(new ErrorResponse("Invalid token", 403));
+  if (!foundUser) return next(new ErrorResponse("Invalid token", 403));
 
   jwt.verify(
     refreshToken,
     process.env.REFRESH_TOKEN_SECRET as string,
-    (err: VerifyErrors | null, decoded: DecodedData | unknown) => {
-      if (err) return next(new ErrorResponse("Expired token", 403));
+    (err: VerifyErrors | null, decoded: unknown) => {
+      console.log("foundUser: ", foundUser);
+      console.log("decoded data: ", decoded);
 
-      if (decoded) {
-        const accessToken = generateAccessToken({
-          email: (decoded as DecodedData).email,
-          role: (decoded as DecodedData).role,
-        });
-        res.status(200).json(accessToken);
-      }
+      if (err || foundUser.email !== (decoded as DecodedData).email)
+        return next(new ErrorResponse("Expired token", 403));
+
+      const accessToken = generateAccessToken({
+        email: (decoded as DecodedData).email,
+        role: (decoded as DecodedData).role,
+      });
+      res.status(200).json(accessToken);
     }
   );
 });
