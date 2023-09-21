@@ -5,6 +5,8 @@ export interface CustomerProps {
   phoneNumber: string;
 }
 
+export interface AdminProps extends CustomerProps {}
+
 export interface ProductProps {
   name: string;
   brand: string;

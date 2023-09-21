@@ -1,13 +1,23 @@
-import jwt from "jsonwebtoken";
 import { NextFunction, Request, Response } from "express";
 import { AuthorizedUser } from "../types";
+import jwt from "jsonwebtoken";
 
-export const generateAccessToken = (user: any) =>
-  jwt.sign(user, process.env.ACCESS_TOKEN_SECRET as string, {
-    expiresIn: "30s",
-  });
+export const generateToken = (
+  user: AuthorizedUser,
+  token: string = "Access",
+  expDate: string = "30s"
+) =>
+  jwt.sign(
+    user,
+    (token === "Access"
+      ? process.env.ACCESS_TOKEN_SECRET
+      : process.env.REFRESH_TOKEN_SECRET) as string,
+    {
+      expiresIn: expDate,
+    }
+  );
 
-export const authenticateToken = (
+export const verifyToken = (
   req: Request,
   res: Response,
   next: NextFunction
