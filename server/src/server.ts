@@ -4,7 +4,7 @@ import authRoute from "./routes/authRoute";
 import root from "./routes/root";
 import productRoute from "./routes/productRoute";
 import errorHandler from "./middleware/errorHandler";
-import { authenticateToken } from "./middleware/authHandler";
+import { verifyToken } from "./middleware/authHandler";
 import cookieParser from "cookie-parser";
 
 const app = express();
@@ -19,7 +19,7 @@ app.use("/", root);
 app.use("/auth", authRoute);
 
 // protected routes
-router.use(authenticateToken);
+router.use(verifyToken);
 
 router.use("/products", productRoute);
 // router.use("/products", (req, res) => res.send("products"));

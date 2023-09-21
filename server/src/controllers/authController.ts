@@ -1,9 +1,14 @@
-import { AuthorizedUser, CustomerProps, DecodedData } from "../types";
+import {
+  AdminProps,
+  AuthorizedUser,
+  CustomerProps,
+  DecodedData,
+} from "../types";
 import bcrypt from "bcrypt";
 import asyncHandler from "../middleware/asyncHandler";
 import ErrorResponse from "../utils/errorResponse";
 import prisma from "../utils/prisma";
-import { generateAccessToken } from "../middleware/authHandler";
+import { generateToken } from "../middleware/authHandler";
 import jwt, { VerifyErrors } from "jsonwebtoken";
 
 /**
@@ -61,12 +66,8 @@ export const loginCustomer = asyncHandler(async (req, res, next) => {
     return next(new ErrorResponse("Credentials are invalid", 401));
 
   const cus: AuthorizedUser = { email, role: foundCustomer.role };
-  const accessToken = generateAccessToken(cus);
-  const refreshToken = jwt.sign(
-    cus,
-    process.env.REFRESH_TOKEN_SECRET as string,
-    { expiresIn: "10d" }
-  );
+  const accessToken = generateToken(cus);
+  const refreshToken = generateToken(cus, "Refresh", "1d");
 
   await prisma.customer.update({
     where: { id: foundCustomer.id },
@@ -80,7 +81,7 @@ export const loginCustomer = asyncHandler(async (req, res, next) => {
     // maxAge: 24 * 60 * 60 * 1000,
   });
 
-  res.status(200).json(accessToken);
+  res.status(200).json({ accessToken });
 });
 
 /**
@@ -94,27 +95,58 @@ export const logoutCustomer = asyncHandler(async (req, res, next) => {
 
 /**
  * Admin Login
- * @route POST api/auth/admin/login
+ * @route POST auth/admin/login
  * @param req email, password
  * @access private (Admin)
  */
-export const loginAdmin = asyncHandler(async (req, res, next) => {});
+export const loginAdmin = asyncHandler(async (req, res, next) => {
+  const { email, password }: Pick<AdminProps, "email" | "password"> = req.body;
+
+  if (!email || !password)
+    return next(new ErrorResponse("Please filled required fields", 400));
+
+  const foundAdmin = await prisma.admin.findUnique({ where: { email } });
+
+  if (!foundAdmin)
+    return next(new ErrorResponse("Credentials are invalid", 401));
+
+  const matchPassword = await bcrypt.compare(password, foundAdmin.password);
+  if (!matchPassword)
+    return next(new ErrorResponse("Credentials are invalid", 401));
+
+  const admin: AuthorizedUser = { email, role: foundAdmin.role };
+  const accessToken = generateToken(admin);
+  const refreshToken = generateToken(admin, "Refresh", "1d");
+
+  await prisma.customer.update({
+    where: { id: foundAdmin.id },
+    data: { refreshToken },
+  });
+
+  res.cookie("jwt", refreshToken, {
+    // httpOnly: true,
+    // secure: true,
+    // sameSite: "none",
+    // maxAge: 24 * 60 * 60 * 1000,
+  });
+
+  res.status(200).json({ accessToken });
+});
 
 /**
  * Admin Logout
- * @route POST api/auth/admin/logout
+ * @route POST auth/admin/logout
  * @access private (Admin)
  */
 export const logoutAdmin = asyncHandler(async (req, res, next) => {});
 
 /**
- * Verify refresh token
- * @description this will sent as cookie in future
+ * Get Refresh Token
+ * @route GET auth/refresh
  * @access public (All)
  */
 export const refreshToken = asyncHandler(async (req, res, next) => {
   const cookies = req.cookies;
-  console.log("cookies", cookies);
   if (!cookies?.jwt) return next(new ErrorResponse("Unauthorized", 401));
   const refreshToken = cookies.jwt;
 
@@ -133,7 +165,7 @@ export const refreshToken = asyncHandler(async (req, res, next) => {
       if (err || foundUser.email !== (decoded as DecodedData).email)
         return next(new ErrorResponse("Expired token", 403));
 
-      const accessToken = generateAccessToken({
+      const accessToken = generateToken({
         email: (decoded as DecodedData).email,
         role: (decoded as DecodedData).role,
       });
