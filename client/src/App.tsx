@@ -1,29 +1,53 @@
-import { Routes, Route } from "react-router-dom";
-import RegisterLayout from "./components/auth/register/RegisterLayout";
-import LoginLayout from "./components/auth/login/LoginLayout";
-import Layout from "./Layout";
-import Profile from "./components/header/Profile";
-import Account from "./components/header/Account";
-import Mail from "./components/mail/Mail";
-import Detail from "./components/main/Detail";
-import Drawer from "react-modern-drawer";
-import "react-modern-drawer/dist/index.css";
-import { useState } from "react";
+import { useState } from 'react'
+import { Button } from './components/ui/button'
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card"
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select"
 
-const App = () => {
+
+function App() {
+  const [count, setCount] = useState(0)
+
   return (
-    <div className="max-w-[95%] lg:max-w-[90%] xl:max-w-[1250px] m-auto mt-6">
-      <Routes>
-        <Route path="/" element={<Layout />} />
-        <Route path="register" element={<RegisterLayout />} />
-        <Route path="login" element={<LoginLayout />} />
-        <Route path="profile" element={<Profile />} />
-        <Route path="account" element={<Account />} />
-        <Route path="detail" element={<Detail />} />
-        <Route path="mail" element={<Mail />} />
-      </Routes>
-    </div>
-  );
-};
+    <section className='container'>
+      <Button>Button</Button>
+      <Card>
+  <CardHeader>
+    <CardTitle>Card Title</CardTitle>
+    <CardDescription>Card Description</CardDescription>
+  </CardHeader>
+  <CardContent>
+    <p>Card Content</p>
+  </CardContent>
+  <CardFooter>
+    <p>Card Footer</p>
+  </CardFooter>
+</Card>
+<Select>
+  <SelectTrigger className="w-[180px]">
+    <SelectValue placeholder="Theme" />
+  </SelectTrigger>
+  <SelectContent>
+    <SelectItem value="light">Light</SelectItem>
+    <SelectItem value="dark">Dark</SelectItem>
+    <SelectItem value="system">System</SelectItem>
+  </SelectContent>
+</Select>
 
-export default App;
+    </section>
+  )
+}
+
+export default App
