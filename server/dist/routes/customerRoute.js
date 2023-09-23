@@ -24,16 +24,8 @@ var __importStar = (this && this.__importStar) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = require("express");
-const productController = __importStar(require("../controllers/productController"));
+const customerController = __importStar(require("../controllers/customerController"));
 const router = (0, express_1.Router)();
-// all user
-router.get("/", productController.getAllProducts);
-router.get("/:id", productController.getAProduct);
-// admin
-router
-    .route("/secure")
-    .post(productController.createProduct)
-    .put(productController.updateProduct)
-    .delete(productController.deleteProduct);
+router.get("/", customerController.getAllCustomers);
 exports.default = router;
-//# sourceMappingURL=productRoute.js.map
+//# sourceMappingURL=customerRoute.js.map

@@ -33,6 +33,7 @@ const router = express_1.default.Router();
 router.post("/register", authController.registerCustomer);
 router.post("/login", authController.loginCustomer);
 router.post("/logout", authController.logoutCustomer);
+router.get("/refresh", authController.refreshToken);
 // admin
 router.post("/admin/login", authController.loginAdmin);
 router.post("/admin/logout", authController.logoutAdmin);

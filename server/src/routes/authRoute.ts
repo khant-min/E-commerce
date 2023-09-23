@@ -1,5 +1,6 @@
 import express from "express";
 import * as authController from "../controllers/authController";
+import { verifyToken } from "../middleware/authHandler";
 
 const router = express.Router();
 
@@ -12,5 +13,6 @@ router.get("/refresh", authController.refreshToken);
 // admin
 router.post("/admin/login", authController.loginAdmin);
 router.post("/admin/logout", authController.logoutAdmin);
+router.post("/admin/newAdmin", verifyToken, authController.createNewAdmin);
 
 export default router;

@@ -87,11 +87,31 @@ export const loginCustomer = asyncHandler(async (req, res, next) => {
 /**
  * Customer Logout
  * @route POST api/auth/logout
+ * @returns successful message
  * @access public (Customer)
  */
 export const logoutCustomer = asyncHandler(async (req, res, next) => {
-  res.send("logoout!");
+  const { email } = req.body;
+  if (!email)
+    return next(new ErrorResponse("Please filled required fields", 400));
+
+  const foundCustomer = await prisma.customer.findUnique({ where: { email } });
+
+  if (!foundCustomer)
+    return next(new ErrorResponse("Credentials are invalid", 401));
+
+  await prisma.customer.update({
+    where: { id: foundCustomer.id },
+    data: { refreshToken: "" },
+  });
+
+  res.status(200).json({ message: "Deleted successfully" });
 });
+
+/**
+ * @route POST auth/admin/newAdmin
+ */
+export const createNewAdmin = asyncHandler(async (req, res, next) => {});
 
 /**
  * Admin Login
@@ -108,11 +128,11 @@ export const loginAdmin = asyncHandler(async (req, res, next) => {
   const foundAdmin = await prisma.admin.findUnique({ where: { email } });
 
   if (!foundAdmin)
-    return next(new ErrorResponse("Credentials are invalid", 401));
+    return next(new ErrorResponse("Credentials are invalid...", 401));
 
-  const matchPassword = await bcrypt.compare(password, foundAdmin.password);
-  if (!matchPassword)
-    return next(new ErrorResponse("Credentials are invalid", 401));
+  // const matchPassword = await bcrypt.compare(password, foundAdmin.password);
+  // if (!matchPassword)
+  //   return next(new ErrorResponse("Credentials are invalid", 401));
 
   const admin: AuthorizedUser = { email, role: foundAdmin.role };
   const accessToken = generateToken(admin);
@@ -138,7 +158,23 @@ export const loginAdmin = asyncHandler(async (req, res, next) => {
  * @route POST auth/admin/logout
  * @access private (Admin)
  */
-export const logoutAdmin = asyncHandler(async (req, res, next) => {});
+export const logoutAdmin = asyncHandler(async (req, res, next) => {
+  const { email } = req.body;
+  if (!email)
+    return next(new ErrorResponse("Please filled required fields", 400));
+
+  const foundAdmin = await prisma.admin.findUnique({ where: { email } });
+
+  if (!foundAdmin)
+    return next(new ErrorResponse("Credentials are invalid", 401));
+
+  await prisma.customer.update({
+    where: { id: foundAdmin.id },
+    data: { refreshToken: "" },
+  });
+
+  res.status(200).json({ message: "Deleted successfully" });
+});
 
 /**
  * Get Refresh Token

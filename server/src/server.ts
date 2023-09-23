@@ -3,6 +3,7 @@ import prisma from "./utils/prisma";
 import authRoute from "./routes/authRoute";
 import root from "./routes/root";
 import productRoute from "./routes/productRoute";
+import customerRoute from "./routes/customerRoute";
 import errorHandler from "./middleware/errorHandler";
 import { verifyToken } from "./middleware/authHandler";
 import cookieParser from "cookie-parser";
@@ -21,8 +22,9 @@ app.use("/auth", authRoute);
 // protected routes
 router.use(verifyToken);
 
-router.use("/products", productRoute);
 // router.use("/products", (req, res) => res.send("products"));
+router.use("/products", productRoute);
+router.use("/customers", customerRoute);
 
 app.use("/api", router);
 app.use("*", (req, res) => res.status(404).send("404 | Not Found"));
@@ -34,19 +36,11 @@ const server = app.listen(PORT, () =>
 );
 
 process.on("SIGINT", async () => {
-  console.log("Received SIGINT. Closing server and disconnecting Prisma.");
   await prisma.$disconnect();
-  server.close(() => {
-    console.log("Server closed.");
-    process.exit(0);
-  });
+  server.close(() => process.exit(0));
 });
 
 process.on("SIGTERM", async () => {
-  console.log("Received SIGTERM. Closing server and disconnecting Prisma.");
   await prisma.$disconnect();
-  server.close(() => {
-    console.log("Server closed.");
-    process.exit(0);
-  });
+  server.close(() => process.exit(0));
 });

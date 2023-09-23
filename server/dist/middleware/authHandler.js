@@ -3,13 +3,15 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.authenticateToken = exports.generateAccessToken = void 0;
+exports.verifyToken = exports.generateToken = void 0;
 const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
-const generateAccessToken = (user) => jsonwebtoken_1.default.sign(user, process.env.ACCESS_TOKEN_SECRET, {
-    expiresIn: "30s",
+const generateToken = (user, token = "Access", expDate = "30s") => jsonwebtoken_1.default.sign(user, (token === "Access"
+    ? process.env.ACCESS_TOKEN_SECRET
+    : process.env.REFRESH_TOKEN_SECRET), {
+    expiresIn: expDate,
 });
-exports.generateAccessToken = generateAccessToken;
-const authenticateToken = (req, res, next) => {
+exports.generateToken = generateToken;
+const verifyToken = (req, res, next) => {
     const token = req.headers.authorization?.split(" ")[1];
     if (token == null)
         return res.sendStatus(401);
@@ -20,5 +22,5 @@ const authenticateToken = (req, res, next) => {
         next();
     });
 };
-exports.authenticateToken = authenticateToken;
+exports.verifyToken = verifyToken;
 //# sourceMappingURL=authHandler.js.map
