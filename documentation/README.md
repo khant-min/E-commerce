@@ -16,7 +16,7 @@
 - PUT| /api/products/secure
 - DELETE| /api/products/secure
 
-# Customer Api
+## Customer Api
 
 - GET| /api/customers
 
