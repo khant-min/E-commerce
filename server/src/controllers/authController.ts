@@ -1,15 +1,9 @@
-import {
-  AdminProps,
-  AuthorizedUser,
-  CustomerProps,
-  DecodedData,
-} from "../types";
+import { AdminProps, AuthorizedUser, CustomerProps } from "../types";
 import bcrypt from "bcrypt";
 import asyncHandler from "../middleware/asyncHandler";
 import ErrorResponse from "../utils/errorResponse";
 import prisma from "../utils/prisma";
 import { generateToken } from "../middleware/authHandler";
-import jwt, { VerifyErrors } from "jsonwebtoken";
 
 /**
  * Register New Customer
@@ -109,11 +103,6 @@ export const logoutCustomer = asyncHandler(async (req, res, next) => {
 });
 
 /**
- * @route POST auth/admin/newAdmin
- */
-export const createNewAdmin = asyncHandler(async (req, res, next) => {});
-
-/**
  * Admin Login
  * @route POST auth/admin/login
  * @param req email, password
@@ -174,38 +163,4 @@ export const logoutAdmin = asyncHandler(async (req, res, next) => {
   });
 
   res.status(200).json({ message: "Deleted successfully" });
-});
-
-/**
- * Get Refresh Token
- * @route GET auth/refresh
- * @access public (All)
- */
-export const refreshToken = asyncHandler(async (req, res, next) => {
-  const cookies = req.cookies;
-  if (!cookies?.jwt) return next(new ErrorResponse("Unauthorized", 401));
-  const refreshToken = cookies.jwt;
-
-  const foundUser = await prisma.customer.findFirst({
-    where: { refreshToken },
-  });
-  if (!foundUser) return next(new ErrorResponse("Invalid token", 403));
-
-  jwt.verify(
-    refreshToken,
-    process.env.REFRESH_TOKEN_SECRET as string,
-    (err: VerifyErrors | null, decoded: unknown) => {
-      console.log("foundUser: ", foundUser);
-      console.log("decoded data: ", decoded);
-
-      if (err || foundUser.email !== (decoded as DecodedData).email)
-        return next(new ErrorResponse("Expired token", 403));
-
-      const accessToken = generateToken({
-        email: (decoded as DecodedData).email,
-        role: (decoded as DecodedData).role,
-      });
-      res.status(200).json(accessToken);
-    }
-  );
 });
