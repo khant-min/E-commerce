@@ -1,13 +1,16 @@
 import { Router } from "express";
 import * as productController from "../controllers/productController";
+import { verifyAdmin } from "../middleware/authHandler";
 
 const router = Router();
 
-// all user
+// public
 router.get("/", productController.getAllProducts);
 router.get("/:id", productController.getAProduct);
 
-// admin
+// private
+router.use("/secure", verifyAdmin);
+
 router
   .route("/secure")
   .post(productController.createProduct)

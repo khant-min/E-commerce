@@ -1,11 +1,13 @@
 import { NextFunction, Request, Response } from "express";
 import { AuthorizedUser, DecodedData } from "../types";
 import jwt from "jsonwebtoken";
+import asyncHandler from "./asyncHandler";
+import ErrorResponse from "../utils/errorResponse";
 
 export const generateToken = (
   user: AuthorizedUser,
   token: string = "Access",
-  expDate: string = "30s"
+  exp: string = "30s"
 ) =>
   jwt.sign(
     user,
@@ -13,7 +15,7 @@ export const generateToken = (
       ? process.env.ACCESS_TOKEN_SECRET
       : process.env.REFRESH_TOKEN_SECRET) as string,
     {
-      expiresIn: expDate,
+      expiresIn: exp,
     }
   );
 
@@ -29,12 +31,16 @@ export const verifyToken = (
     token,
     process.env.ACCESS_TOKEN_SECRET as string,
     (err, decoded) => {
-      console.log("data", decoded);
       if (err) return res.sendStatus(403);
-      if ((decoded as DecodedData).role !== "ADMIN")
-        return res.status(401).json({ message: "Not Allowed" });
-      req.customerInfo = decoded as DecodedData;
+      req.userInfo = decoded as DecodedData;
       next();
     }
   );
 };
+
+export const verifyAdmin = asyncHandler(async (req, res, next) => {
+  const { role } = req.userInfo!;
+
+  if (role !== "ADMIN") return next(new ErrorResponse("Not Allowed", 403));
+  next();
+});

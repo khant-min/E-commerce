@@ -4,6 +4,8 @@ import authRoute from "./routes/authRoute";
 import root from "./routes/root";
 import productRoute from "./routes/productRoute";
 import customerRoute from "./routes/customerRoute";
+import serviceRoute from "./routes/serviceRoute";
+import notFound from "./routes/notFound";
 import errorHandler from "./middleware/errorHandler";
 import { verifyToken } from "./middleware/authHandler";
 import cookieParser from "cookie-parser";
@@ -19,15 +21,14 @@ app.use(cookieParser());
 app.use("/", root);
 app.use("/auth", authRoute);
 
-// protected routes
+router.use("/services", serviceRoute);
 router.use(verifyToken);
 
-// router.use("/products", (req, res) => res.send("products"));
 router.use("/products", productRoute);
 router.use("/customers", customerRoute);
 
 app.use("/api", router);
-app.use("*", (req, res) => res.status(404).send("404 | Not Found"));
+app.use("*", notFound);
 
 app.use(errorHandler);
 
