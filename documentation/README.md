@@ -2,20 +2,28 @@
 
 ### Authentication
 
-- POST|/auth/register
-- POST|/auth/login
-- GET|/auth/logout
-- GET|/auth/refresh
-- POST|/auth/admin/login
-- POST|/auth/admin/logout
+- POST| /auth/register
+- POST| /auth/login
+- POST| /auth/logout
+- POST| /auth/admin/login
+- POST| /auth/admin/logout
 
 ### Products Api
 
-- GET|/api/products
-- GET|/api/products/:id
-- POST|/api/products/secure
-- PUT|/api/products/secure
-- DELETE|/api/products/secure
+- GET| /api/products
+- GET| /api/products/:id
+- POST| /api/products/secure
+- PUT| /api/products/secure
+- DELETE| /api/products/secure
+
+# Customer Api
+
+- GET| /api/customers
+
+### Services Api
+
+- POST| /api/services/refresh
+- POST| /api/services/secure/newAdmin
 
 ## Tech Stacks
 
