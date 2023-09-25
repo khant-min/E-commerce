@@ -6,6 +6,9 @@ import { VerifyErrors } from "jsonwebtoken";
 import { AdminProps, DecodedData } from "../types";
 import jwt from "jsonwebtoken";
 import bcrypt from "bcrypt";
+import nodemailer from "nodemailer";
+import Mailgen from "mailgen";
+import MailService from "../utils/mail";
 
 /**
  * Get Refresh Token
@@ -69,4 +72,30 @@ export const createNewAdmin = asyncHandler(async (req, res, next) => {
   });
 
   res.status(201).json(`New Admin ${name} created successfully`);
+});
+
+/**
+ * @description sends OTP code to customer's email
+ * @route POST /api/services/forgotPassword
+ */
+export const forgotPassword = asyncHandler(async (req, res, next) => {
+  const { name, email } = req.body;
+  if (!name || !email)
+    return next(new ErrorResponse("Please fill all required fields", 400));
+
+  const message = {
+    from: process.env.EMAIL,
+    to: email,
+    subject: "OTP Code",
+    html: MailService.mailGenerator(name),
+  };
+
+  try {
+    await MailService.transporter.sendMail(message);
+    res.status(200).json({
+      message: "We've sent an OTP code to your email, please check...",
+    });
+  } catch (err) {
+    return next(new ErrorResponse("Nodemailer error", 500));
+  }
 });

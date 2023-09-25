@@ -1,4 +1,3 @@
-import { Request, Response } from "express";
 import { ProductProps } from "../types";
 import asyncHandler from "../middleware/asyncHandler";
 import ErrorResponse from "../utils/errorResponse";
