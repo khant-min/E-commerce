@@ -29,7 +29,7 @@ export const registerCustomer = asyncHandler(async (req, res, next) => {
   const salt = 10;
   const hashPassword = await bcrypt.hash(password, salt);
 
-  const customer = await prisma.customer.create({
+  await prisma.customer.create({
     data: { name, email, password: hashPassword, phoneNumber },
   });
 
@@ -127,7 +127,7 @@ export const loginAdmin = asyncHandler(async (req, res, next) => {
   const accessToken = generateToken(admin);
   const refreshToken = generateToken(admin, "Refresh", "1d");
 
-  await prisma.customer.update({
+  await prisma.admin.update({
     where: { id: foundAdmin.id },
     data: { refreshToken },
   });
@@ -157,7 +157,7 @@ export const logoutAdmin = asyncHandler(async (req, res, next) => {
   if (!foundAdmin)
     return next(new ErrorResponse("Credentials are invalid", 401));
 
-  await prisma.customer.update({
+  await prisma.admin.update({
     where: { id: foundAdmin.id },
     data: { refreshToken: "" },
   });

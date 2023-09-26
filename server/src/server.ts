@@ -23,7 +23,6 @@ app.use("/auth", authRoute);
 
 router.use("/services", serviceRoute);
 router.use(verifyToken);
-
 router.use("/products", productRoute);
 router.use("/customers", customerRoute);
 
