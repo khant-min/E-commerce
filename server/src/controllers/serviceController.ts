@@ -130,8 +130,8 @@ export const verifyOTPCode = asyncHandler(async (req, res, next) => {
  * @access public (All)
  */
 export const resetPassword = asyncHandler(async (req, res, next) => {
-  const { id, passwrod, role } = req.body;
-  if (!id || !passwrod)
+  const { id, password, role } = req.body;
+  if (!id || !password || !role)
     return next(new ErrorResponse("Please fill required fields", 400));
 
   const foundUser =
@@ -142,7 +142,7 @@ export const resetPassword = asyncHandler(async (req, res, next) => {
   if (!foundUser) return next(new ErrorResponse("User not found", 404));
 
   const salt = 10;
-  const hashedPassword = await bcrypt.hash(passwrod, salt);
+  const hashedPassword = await bcrypt.hash(password, salt);
 
   role === "ADMIN"
     ? await prisma.admin.update({

@@ -9,10 +9,10 @@ router.get("/", productController.getAllProducts);
 router.get("/:id", productController.getAProduct);
 
 // private
-router.use("/secure", verifyAdmin);
+router.use("/_secure_", verifyAdmin);
 
 router
-  .route("/secure")
+  .route("/_secure_")
   .post(productController.createProduct)
   .put(productController.updateProduct)
   .delete(productController.deleteProduct);
