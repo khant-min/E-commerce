@@ -1,6 +1,5 @@
 import nodemailer from "nodemailer";
 import Mailgen from "mailgen";
-import { generateAdminOTP, generateCustomerOTP } from "./generateOTP";
 
 class MailService {
   config = {

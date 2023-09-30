@@ -3,6 +3,7 @@ export interface CustomerProps {
   email: string;
   password: string;
   phoneNumber: string;
+  role: "ADMIN" | "CUSTOMER";
 }
 
 export interface AdminProps extends CustomerProps {}

@@ -12,3 +12,4 @@ export function generateAdminOTP(): string {
   const randomDigits = crypto.randomBytes(4).readUIntBE(0, 4);
   return `${randomLetter1}-${String(randomDigits).slice(0, 8)}`;
 }
+
