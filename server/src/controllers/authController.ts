@@ -44,11 +44,16 @@ export const registerCustomer = asyncHandler(async (req, res, next) => {
  * @returns Access Token, Refresh Token
  */
 export const loginCustomer = asyncHandler(async (req, res, next) => {
-  const { email, password }: Pick<CustomerProps, "email" | "password"> =
-    req.body;
+  const {
+    email,
+    password,
+    role,
+  }: Pick<CustomerProps, "email" | "password" | "role"> = req.body;
 
-  if (!email || !password)
+  if (!email || !password || !role)
     return next(new ErrorResponse("Please filled required fields", 400));
+
+  if (role !== "CUSTOMER") return next(new ErrorResponse("Not Allowed", 403));
 
   const foundCustomer = await prisma.customer.findUnique({ where: { email } });
 
@@ -99,7 +104,7 @@ export const logoutCustomer = asyncHandler(async (req, res, next) => {
     data: { refreshToken: "" },
   });
 
-  res.status(200).json({ message: "Deleted successfully" });
+  res.status(200).json({ message: "Logout successfully" });
 });
 
 /**
@@ -109,19 +114,25 @@ export const logoutCustomer = asyncHandler(async (req, res, next) => {
  * @access private (Admin)
  */
 export const loginAdmin = asyncHandler(async (req, res, next) => {
-  const { email, password }: Pick<AdminProps, "email" | "password"> = req.body;
+  const {
+    email,
+    password,
+    role,
+  }: Pick<AdminProps, "email" | "password" | "role"> = req.body;
 
-  if (!email || !password)
+  if (!email || !password || !role)
     return next(new ErrorResponse("Please filled required fields", 400));
+
+  if (role !== "ADMIN") return next(new ErrorResponse("Not Allowed", 403));
 
   const foundAdmin = await prisma.admin.findUnique({ where: { email } });
 
   if (!foundAdmin)
     return next(new ErrorResponse("Credentials are invalid...", 401));
 
-  // const matchPassword = await bcrypt.compare(password, foundAdmin.password);
-  // if (!matchPassword)
-  //   return next(new ErrorResponse("Credentials are invalid", 401));
+  const matchPassword = await bcrypt.compare(password, foundAdmin.password);
+  if (!matchPassword)
+    return next(new ErrorResponse("Credentials are invalid", 401));
 
   const admin: AuthorizedUser = { email, role: foundAdmin.role };
   const accessToken = generateToken(admin);
