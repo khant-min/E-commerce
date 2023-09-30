@@ -7,7 +7,17 @@ exports.getAllCustomers = void 0;
 const asyncHandler_1 = __importDefault(require("../middleware/asyncHandler"));
 const prisma_1 = __importDefault(require("../utils/prisma"));
 exports.getAllCustomers = (0, asyncHandler_1.default)(async (req, res, next) => {
-    const customers = await prisma_1.default.customer.findMany();
+    const customers = await prisma_1.default.customer.findMany({
+        select: {
+            id: true,
+            name: true,
+            email: true,
+            phoneNumber: true,
+            createdAt: true,
+            updatedAt: true,
+            refreshToken: true,
+        },
+    });
     res.status(200).json({ customers });
 });
 //# sourceMappingURL=customerController.js.map

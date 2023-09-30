@@ -24,18 +24,19 @@ var __importStar = (this && this.__importStar) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = require("express");
-const productController = __importStar(require("../controllers/productController"));
+const serviceController = __importStar(require("../controllers/serviceController"));
 const authHandler_1 = require("../middleware/authHandler");
 const router = (0, express_1.Router)();
 // public
-router.get("/", productController.getAllProducts);
-router.get("/:id", productController.getAProduct);
+router.post("/refresh", serviceController.refreshToken);
+// router.post("/get_otp", verifyToken, serviceController.getOTPCode);
+// router.post("/verify_otp", verifyToken, serviceController.verifyOTPCode);
+// router.post("/reset_password", verifyToken, serviceController.resetPassword);
+router.post("/get_otp", serviceController.getOTPCode);
+router.post("/verify_otp", serviceController.verifyOTPCode);
+router.post("/reset_password", serviceController.resetPassword);
 // private
 router.use("/_secure_", authHandler_1.verifyAdmin);
-router
-    .route("/_secure_")
-    .post(productController.createProduct)
-    .put(productController.updateProduct)
-    .delete(productController.deleteProduct);
+router.post("/_secure_/new_admin", serviceController.createNewAdmin);
 exports.default = router;
-//# sourceMappingURL=productRoute.js.map
+//# sourceMappingURL=serviceRoute.js.map
