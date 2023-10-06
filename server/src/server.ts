@@ -9,6 +9,7 @@ import notFound from "./routes/notFound";
 import errorHandler from "./middleware/errorHandler";
 import { verifyToken } from "./middleware/authHandler";
 import cookieParser from "cookie-parser";
+import cors from "cors";
 
 const app = express();
 const router = express.Router({ mergeParams: true });
@@ -17,6 +18,7 @@ const PORT = process.env.PORT || 8080;
 
 app.use(express.json());
 app.use(cookieParser());
+app.use(cors());
 
 app.use("/", root);
 app.use("/auth", authRoute);

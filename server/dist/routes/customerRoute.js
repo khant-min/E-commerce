@@ -25,7 +25,9 @@ var __importStar = (this && this.__importStar) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = require("express");
 const customerController = __importStar(require("../controllers/customerController"));
+const authHandler_1 = require("../middleware/authHandler");
 const router = (0, express_1.Router)();
+router.use("/", authHandler_1.verifyAdmin);
 router.get("/", customerController.getAllCustomers);
 exports.default = router;
 //# sourceMappingURL=customerRoute.js.map

@@ -14,7 +14,7 @@ router.post("/verify_otp", serviceController.verifyOTPCode);
 router.post("/reset_password", serviceController.resetPassword);
 
 // private
-router.use("/_secure_", verifyAdmin);
+// router.use("/_secure_", verifyAdmin);
 router.post("/_secure_/new_admin", serviceController.createNewAdmin);
 
 export default router;
