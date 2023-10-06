@@ -54,14 +54,14 @@ export const createNewAdmin = asyncHandler(async (req, res, next) => {
   if (!name || !email || !password || !phoneNumber)
     return next(new ErrorResponse("Please filled required fields", 400));
 
-  const findExistingAdmin = await prisma.admin.findFirst({
-    where: {
-      OR: [{ email }, { phoneNumber }],
-    },
-  });
+  // const findExistingAdmin = await prisma.admin.findFirst({
+  //   where: {
+  //     OR: [{ email }, { phoneNumber }],
+  //   },
+  // });
 
-  if (findExistingAdmin)
-    return next(new ErrorResponse("User already exists", 409));
+  // if (findExistingAdmin)
+  //   return next(new ErrorResponse("User already exists", 409));
 
   const salt = 10;
   const hashPassword = await bcrypt.hash(password, salt);
