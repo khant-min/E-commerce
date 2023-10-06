@@ -29,12 +29,11 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importDefault(require("express"));
 const authController = __importStar(require("../controllers/authController"));
 const router = express_1.default.Router();
-// all user
+// public
 router.post("/register", authController.registerCustomer);
 router.post("/login", authController.loginCustomer);
 router.post("/logout", authController.logoutCustomer);
-router.get("/refresh", authController.refreshToken);
-// admin
+// private
 router.post("/admin/login", authController.loginAdmin);
 router.post("/admin/logout", authController.logoutAdmin);
 exports.default = router;
