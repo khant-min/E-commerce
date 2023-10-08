@@ -65,7 +65,7 @@ model Admin {
   password     String   @db.VarChar(100)
   role         Role     @default(ADMIN)
   phoneNumber  String   @unique @db.VarChar(15)
-  refreshToken String   @default("")
+  refreshToken String   @default("") @db.VarChar(200)
   createdAt    DateTime @default(now())
   updatedAt    DateTime @updatedAt
 }

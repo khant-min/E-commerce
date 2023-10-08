@@ -19,8 +19,8 @@ export const refreshToken = asyncHandler(async (req, res, next) => {
   const cookies = req.cookies;
   if (!cookies?.jwt) return next(new ErrorResponse("Unauthorized", 401));
   const refreshToken = cookies.jwt;
-
-  const foundUser = await prisma.customer.findFirst({
+  console.log(refreshToken);
+  const foundUser = await prisma.admin.findFirst({
     where: { refreshToken },
   });
   if (!foundUser) return next(new ErrorResponse("Invalid token", 403));

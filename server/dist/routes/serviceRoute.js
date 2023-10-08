@@ -25,7 +25,6 @@ var __importStar = (this && this.__importStar) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = require("express");
 const serviceController = __importStar(require("../controllers/serviceController"));
-const authHandler_1 = require("../middleware/authHandler");
 const router = (0, express_1.Router)();
 // public
 router.post("/refresh", serviceController.refreshToken);
@@ -36,7 +35,7 @@ router.post("/get_otp", serviceController.getOTPCode);
 router.post("/verify_otp", serviceController.verifyOTPCode);
 router.post("/reset_password", serviceController.resetPassword);
 // private
-router.use("/_secure_", authHandler_1.verifyAdmin);
+// router.use("/_secure_", verifyAdmin);
 router.post("/_secure_/new_admin", serviceController.createNewAdmin);
 exports.default = router;
 //# sourceMappingURL=serviceRoute.js.map
