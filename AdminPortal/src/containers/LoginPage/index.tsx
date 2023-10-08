@@ -39,7 +39,7 @@ const defaultTheme = createTheme();
 
 export default function Login() {
   const navigate: NavigateFunction = useNavigate();
-  const accessToken = useAppSelector((state) => state.auth.accessToken);
+  const accessToken = useAppSelector(state => state.auth.accessToken);
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -80,7 +80,7 @@ export default function Login() {
             backgroundImage:
               "url(https://source.unsplash.com/random?wallpapers)",
             backgroundRepeat: "no-repeat",
-            backgroundColor: (t) =>
+            backgroundColor: t =>
               t.palette.mode === "light"
                 ? t.palette.grey[50]
                 : t.palette.grey[900],
