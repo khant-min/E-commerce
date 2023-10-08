@@ -1,4 +1,7 @@
-import { clearAccessToken, setAccessToken } from "../redux/auth/actions";
+import {
+  clearAccessToken,
+  setAccessToken,
+} from "../redux/features/auth/actions";
 import { store } from "../redux/store/store";
 import ApiService from "./ApiService";
 
@@ -41,8 +44,8 @@ class AuthService {
   public async refresh(): Promise<void> {
     try {
       const response = await ApiService.call<Response>(
-        "GET",
-        "/services/refresh"
+        "POST",
+        "/api/services/refresh"
       );
 
       const accessToken = response.accessToken;

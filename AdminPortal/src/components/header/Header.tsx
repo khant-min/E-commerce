@@ -4,6 +4,7 @@ import SettingsOutlinedIcon from "@mui/icons-material/SettingsOutlined";
 import NightlightIcon from "@mui/icons-material/Nightlight";
 import { Avatar } from "@mui/material";
 import "./Header.css";
+import Typography from "@mui/material/Typography";
 
 export default function Header() {
   return (
@@ -17,7 +18,10 @@ export default function Header() {
             <MenuRoundedIcon />
           </div>
           <div>
-            <SettingsOutlinedIcon />
+            <div>
+              <SettingsOutlinedIcon />
+              <Typography>Settings</Typography>
+            </div>
           </div>
         </div>
         <div className="right gap-20">
