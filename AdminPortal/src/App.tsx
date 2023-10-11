@@ -1,33 +1,22 @@
 import { Routes, Route } from "react-router-dom";
 import "./index.css";
+import useRefreshToken from "./hooks/useRefreshToken";
+import { Button } from "@mui/material";
 
 const Home = () => {
+  const refresh = useRefreshToken();
   return (
-    <>
-      <h1 className="header">WELCOME TO QUICKPAY</h1>
-      <h3>Bank of the free</h3>
-      <p>Lorem ipsum dolor sit amet...</p>
-    </>
-  );
-};
-
-const Dashboard = () => {
-  return (
-    <>
-      <h1 className="header">DASHBOARD PAGE</h1>
-      <h3>Welcome User</h3>
-      <p>Lorem ipsum dolor sit amet...</p>
-    </>
-  );
-};
-
-const Transactions = () => {
-  return (
-    <>
-      <h1 className="header">KEEP TRACK OF YOUR SPENDINGS</h1>
-      <h3>Seamless Transactions</h3>
-      <p>Lorem ipsum dolor sit amet...</p>
-    </>
+    <div>
+      <Button
+        onClick={() => {
+          console.log("called");
+          refresh();
+          console.log("called 2");
+        }}
+      >
+        Refresh!
+      </Button>
+    </div>
   );
 };
 
@@ -37,8 +26,6 @@ export default function App() {
       <section>
         <Routes>
           <Route path="/" element={<Home />} />
-          <Route path="dashboard" element={<Dashboard />} />
-          <Route path="transactions" element={<Transactions />} />
         </Routes>
       </section>
     </div>

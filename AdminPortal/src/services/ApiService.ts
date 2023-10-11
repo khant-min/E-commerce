@@ -48,3 +48,19 @@ class ApiService {
 }
 
 export default new ApiService();
+
+// import axios from "axios";
+
+// class ApiService {
+//   private api;
+
+//   constructor() {
+//     this.api = axios.create({
+//       baseURL: "http://localhost:8080",
+//     });
+//   }
+
+//   getCredentials() {}
+// }
+
+// export default new ApiService();
