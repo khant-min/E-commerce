@@ -1,24 +1,32 @@
-import { createContext, useMemo, useContext } from "react";
-import { ChildrenProps, DataContextProps, UserCredentials } from "../types";
+import { createContext, useMemo, useContext, useState } from "react";
+import {
+  ChildrenProps,
+  AuthContextProps,
+  UserCredentials,
+  StoredUserCredentials,
+} from "../types";
 import UserService from "../services/UserService";
 import { useNavigate } from "react-router-dom";
 import { useLocalStorage } from "../hooks/useLocalStorage";
 
-const DataContext = createContext<DataContextProps | null>(null);
+const AuthContext = createContext<AuthContextProps | null>(null);
 
 // This provider will have important and small providers e.g.. auth, theme
 export const DataProvider = ({ children }: ChildrenProps) => {
-  const [user, setUser] = useLocalStorage("user", null);
-  console.log("user in provider: ", user);
-  // const [auth, setAuth] = useState({}) // for refresh token case
+  const [user, setUser] = useLocalStorage<StoredUserCredentials | null>(
+    "user",
+    null
+  );
+  const [auth, setAuth] = useState<any>();
   const navigate = useNavigate();
 
   // show noti here...
   const login = async (data: UserCredentials) => {
     try {
       const response = await UserService.login(data);
-      console.log("response user", response);
       setUser(response.data);
+      // setAuth(user);
+      // console.log("user: ", user);
       navigate("/");
     } catch (err) {
       console.log(err);
@@ -39,12 +47,14 @@ export const DataProvider = ({ children }: ChildrenProps) => {
       user,
       login,
       logout,
+      auth,
+      setAuth,
     }),
     []
   );
 
-  return <DataContext.Provider value={value}>{children}</DataContext.Provider>;
+  return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 };
 
-export const useData = () => useContext(DataContext);
-export default DataContext;
+export const useAuth = () => useContext(AuthContext);
+export default AuthContext;

@@ -12,8 +12,15 @@ export interface UserCredentials {
   role: "ADMIN";
 }
 
-export interface DataContextProps {
-  user: UserCredentials | null;
+export interface StoredUserCredentials {
+  email: string;
+  accessToken: string;
+}
+
+export interface AuthContextProps {
+  user: StoredUserCredentials | null;
   login: (data: UserCredentials) => Promise<void>;
   logout: () => Promise<void>;
+  auth: any;
+  setAuth: React.Dispatch<any>;
 }

@@ -12,8 +12,8 @@ import Grid from "@mui/material/Grid";
 import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import Typography from "@mui/material/Typography";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
-import { DataContextProps, UserCredentials } from "../../types";
-import { useData } from "../../context/DataProvider";
+import { AuthContextProps, UserCredentials } from "../../types";
+import { useAuth } from "../../context/AuthProvider";
 import { Navigate } from "react-router-dom";
 
 function Copyright(props: any) {
@@ -38,12 +38,11 @@ function Copyright(props: any) {
 const defaultTheme = createTheme();
 
 export default function Login() {
-  const { user, login } = useData() as DataContextProps;
+  const { user, login } = useAuth() as AuthContextProps;
 
   if (user) return <Navigate to="/" />;
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-    console.log("submit");
     e.preventDefault();
     const data = new FormData(e.currentTarget);
 

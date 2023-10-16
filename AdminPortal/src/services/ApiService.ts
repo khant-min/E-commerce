@@ -1,4 +1,4 @@
-import axios from "axios";
+import axios, { AxiosRequestConfig } from "axios";
 
 class ApiService {
   private api;
@@ -11,18 +11,23 @@ class ApiService {
 
   getCredentials() {}
 
-  async call(end_point: string, method: string, payload: unknown = "<BLANK>") {
+  async call(
+    end_point: string,
+    method: string,
+    payload: unknown = "<BLANK>",
+    config: AxiosRequestConfig = {}
+  ) {
     try {
       let response;
       switch (method) {
         case "GET":
-          response = await this.api.get(end_point);
+          response = await this.api.get(end_point, config);
           break;
         case "POST":
-          response = await this.api.post(end_point, payload);
+          response = await this.api.post(end_point, payload, config);
           break;
         case "UPDATE":
-          response = await this.api.put(end_point, payload);
+          response = await this.api.put(end_point, payload, config);
           break;
         case "DELETE":
           response = await this.api.delete(end_point);

@@ -1,21 +1,11 @@
 import { Routes, Route } from "react-router-dom";
 import "./index.css";
-import useRefreshToken from "./hooks/useRefreshToken";
-import { Button } from "@mui/material";
+import User from "./__test__/User";
 
 const Home = () => {
-  const refresh = useRefreshToken();
   return (
     <div>
-      <Button
-        onClick={() => {
-          console.log("called");
-          refresh();
-          console.log("called 2");
-        }}
-      >
-        Refresh!
-      </Button>
+      <User />
     </div>
   );
 };

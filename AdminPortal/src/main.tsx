@@ -7,7 +7,7 @@ import PageWrapper from "./hoc/PageWrapper.tsx";
 import Login from "./containers/LoginPage/index.tsx";
 import { Provider } from "react-redux";
 import { store } from "./redux/store/store.ts";
-import { DataProvider } from "./context/DataProvider.tsx";
+import { DataProvider } from "./context/AuthProvider.tsx";
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.StrictMode>
