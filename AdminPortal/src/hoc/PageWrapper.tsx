@@ -7,7 +7,7 @@ import { Navigate } from "react-router-dom";
 import { useAppSelector } from "../redux/store/store";
 
 export default function PageWrapper({ children }: ChildrenProps) {
-  const accessToken = useAppSelector((state) => state.auth.accessToken);
+  const accessToken = useAppSelector(state => state.auth.accessToken);
 
   const handleRefresh = async () => {
     try {
@@ -24,15 +24,16 @@ export default function PageWrapper({ children }: ChildrenProps) {
     }
   }, []);
 
-  if (!accessToken) {
-    return <Navigate to={"/login"} />;
-  }
+  // if (!accessToken) {
+  //   return <Navigate to={"/login"} />;
+  // }
+
   return (
     <div>
       <Header />
       <div style={{ display: "flex" }}>
         <Sider />
-        <div style={{ maxWidth: "100%" }}>{children}</div>
+        <div style={{ width: "100%" }}>{children}</div>
       </div>
     </div>
   );
