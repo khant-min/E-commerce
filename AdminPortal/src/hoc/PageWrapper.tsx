@@ -1,3 +1,4 @@
+import { useEffect } from "react";
 import { Navigate } from "react-router-dom";
 import Header from "../components/header/Header";
 import Sider from "../components/sidebar/Sider";
@@ -9,7 +10,9 @@ export default function PageWrapper({ children }: ChildrenProps) {
 
   if (!user) return <Navigate to="/login" />;
 
-  setAuth(user);
+  useEffect(() => {
+    setAuth(user);
+  }, []);
 
   return (
     <div>
