@@ -7,9 +7,10 @@ import { AuthContextProps } from "../types";
 const useAxiosPrivate = () => {
   const refresh = useRefreshToken();
   const { auth } = useAuth() as AuthContextProps;
+  const privateApi = TokenService.getPrivateApi();
 
   useEffect(() => {
-    const requestIntercept = TokenService.interceptors.request.use(
+    const requestIntercept = privateApi.interceptors.request.use(
       config => {
         if (!config.headers["Authorization"]) {
           config.headers["Authorization"] = `Bearer ${auth?.accessToken}`;
@@ -19,7 +20,7 @@ const useAxiosPrivate = () => {
       err => Promise.reject(err)
     );
 
-    const responseIntercept = TokenService.interceptors.response.use(
+    const responseIntercept = privateApi.interceptors.response.use(
       response => response,
       async err => {
         console.log("err: ", err);
@@ -28,19 +29,19 @@ const useAxiosPrivate = () => {
           prevRequest.sent = true;
           const newAccessToken = await refresh();
           prevRequest.headers["Authorization"] = `Bearer ${newAccessToken}`;
-          return TokenService(prevRequest);
+          return privateApi(prevRequest);
         }
         return Promise.reject(err);
       }
     );
 
     return () => {
-      TokenService.interceptors.request.eject(requestIntercept);
-      TokenService.interceptors.response.eject(responseIntercept);
+      privateApi.interceptors.request.eject(requestIntercept);
+      privateApi.interceptors.response.eject(responseIntercept);
     };
   }, [auth, refresh]);
 
-  return TokenService;
+  return privateApi;
 };
 
 export default useAxiosPrivate;
