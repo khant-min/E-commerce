@@ -17,9 +17,9 @@ export default function PageWrapper({ children }: ChildrenProps) {
   return (
     <div>
       <Header />
-      <div style={{ display: "flex" }}>
+      <div className="flex gap-10">
         <Sider />
-        <div style={{ width: "100%" }}>{children}</div>
+        <div className="w-full mt-10">{children}</div>
       </div>
     </div>
   );

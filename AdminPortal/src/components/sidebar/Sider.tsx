@@ -124,7 +124,7 @@ const Sidebar = () => {
             <ListItemIcon>
               <Home />
             </ListItemIcon>
-            <ListItemText primary="Homepage" />
+            <ListItemText primary="Home" />
           </ListItemButton>
         </ListItem>
         <ListItem disablePadding>
@@ -132,15 +132,15 @@ const Sidebar = () => {
             <ListItemIcon>
               <Article />
             </ListItemIcon>
-            <ListItemText primary="Pages" />
+            <ListItemText primary="Customers" />
           </ListItemButton>
         </ListItem>
         <ListItem disablePadding>
-          <ListItemButton component="a" href="#simple-list">
+          <ListItemButton component={Link} to="/users">
             <ListItemIcon>
               <Group />
             </ListItemIcon>
-            <ListItemText primary="Groups" />
+            <ListItemText primary="Users" />
           </ListItemButton>
         </ListItem>
         <ListItem disablePadding>

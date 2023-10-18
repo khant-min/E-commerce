@@ -37,7 +37,7 @@ function Copyright(props: any) {
 // TODO remove, this demo shouldn't need to reset the theme.
 const defaultTheme = createTheme();
 
-export default function Login() {
+export default function LoginPage() {
   const { user, login } = useAuth() as AuthContextProps;
 
   if (user) return <Navigate to="/" />;
