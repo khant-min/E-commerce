@@ -21,34 +21,34 @@ function createData(
 
 const rows = [
   createData(
-    12345678,
+    123456378,
     "Khant Min",
     "khantmin@gmail.com",
     "09767805073",
     true,
     "profile.jpg",
-    "18.10.23",
-    "20.10.23"
+    "18 May 2023",
+    "20 March 2023"
   ),
   createData(
-    12345678,
+    123415678,
     "Khant Min",
     "khantmin@gmail.com",
     "09767805073",
     true,
     "profile.jpg",
-    "18.10.23",
-    "20.10.23"
+    "18 May 2023",
+    "20 March 2023"
   ),
   createData(
-    12345678,
+    123452678,
     "Khant Min",
     "khantmin@gmail.com",
     "09767805073",
     true,
     "profile.jpg",
-    "18.10.23",
-    "20.10.23"
+    "18 May 2023",
+    "20 March 2023"
   ),
 ];
 
@@ -71,7 +71,7 @@ export default function CustomersPage() {
         <TableBody>
           {rows.map(row => (
             <TableRow
-              key={row.name}
+              key={row.id}
               sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
             >
               <TableCell component="th" scope="row">

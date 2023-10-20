@@ -92,6 +92,7 @@
 import {
   AccountBox,
   Article,
+  Dashboard,
   Group,
   Home,
   ModeNight,
@@ -122,9 +123,10 @@ const Sidebar = () => {
         <ListItem disablePadding>
           <ListItemButton component="a" href="#home">
             <ListItemIcon>
-              <Home />
+              <Dashboard />
+              {/* <Home /> */}
             </ListItemIcon>
-            <ListItemText primary="Home" />
+            <ListItemText primary="Dashboard" />
           </ListItemButton>
         </ListItem>
         <ListItem disablePadding>
@@ -136,23 +138,23 @@ const Sidebar = () => {
           </ListItemButton>
         </ListItem>
         <ListItem disablePadding>
-          <ListItemButton component={Link} to="/users">
+          <ListItemButton component={Link} to="/products">
             <ListItemIcon>
               <Group />
+            </ListItemIcon>
+            <ListItemText primary="Products" />
+          </ListItemButton>
+        </ListItem>
+        <ListItem disablePadding>
+          <ListItemButton component={Link} to="/users">
+            <ListItemIcon>
+              <Storefront />
             </ListItemIcon>
             <ListItemText primary="Users" />
           </ListItemButton>
         </ListItem>
         <ListItem disablePadding>
-          <ListItemButton component="a" href="#simple-list">
-            <ListItemIcon>
-              <Storefront />
-            </ListItemIcon>
-            <ListItemText primary="Marketplace" />
-          </ListItemButton>
-        </ListItem>
-        <ListItem disablePadding>
-          <ListItemButton component="a" href="#simple-list">
+          <ListItemButton component={Link} to="/user">
             <ListItemIcon>
               <Person />
             </ListItemIcon>
