@@ -11,13 +11,15 @@ import { verifyToken } from "./middleware/authHandler";
 import cookieParser from "cookie-parser";
 import cors from "cors";
 import corsOptions from "./config/corsOptions";
-import credentials from "./middleware/credentials";
+import credentials from "./middleware/credentialHandler";
+import { logger } from "./middleware/logHandler";
 
 const app = express();
 const router = express.Router({ mergeParams: true });
 
 const PORT = process.env.PORT || 8080;
 
+app.use(logger);
 app.use(credentials);
 app.use(cors(corsOptions));
 app.use(express.json());
