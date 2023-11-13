@@ -38,7 +38,7 @@ export const DataProvider = ({ children }: ChildrenProps) => {
       setUser(null);
       navigate("/login", { replace: true });
     } catch (err) {
-      console.log(err);
+      console.log("err: ", err);
     }
   };
 

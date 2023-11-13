@@ -1,13 +1,15 @@
-import axios from "axios";
 import { useAuth } from "../context/AuthProvider";
 import { AuthContextProps } from "../types";
+import ApiService from "../services/ApiService";
 
 export default function useRefreshToken() {
   const { setAuth } = useAuth() as AuthContextProps;
 
   const refresh = async () => {
-    const response = await axios.get(
+    const response = await ApiService.call(
       "http://localhost:8080/api/services/refresh",
+      "GET",
+      {},
       {
         withCredentials: true, // this sent backend with cookies
       }

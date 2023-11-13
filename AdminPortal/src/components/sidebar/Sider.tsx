@@ -94,7 +94,6 @@ import {
   Article,
   Dashboard,
   Group,
-  Home,
   ModeNight,
   Person,
   Settings,
