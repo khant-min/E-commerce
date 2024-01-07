@@ -8,7 +8,7 @@ interface ErrorType {
 const errorHandler: ErrorRequestHandler = (err: ErrorType, req, res, next) => {
   console.log("err: ", err);
 
-  res.status(err.status).send(err.message);
+  res.status(err.status ? err.status : 400).send(err.message);
 };
 
 export default errorHandler;

@@ -113,11 +113,12 @@ exports.loginAdmin = (0, asyncHandler_1.default)(async (req, res, next) => {
         data: { refreshToken },
     });
     res.cookie("jwt", refreshToken, {
-    // httpOnly: true,
-    // secure: true,
-    // sameSite: "none",
-    // maxAge: 24 * 60 * 60 * 1000,
+        httpOnly: true,
+        secure: true,
+        sameSite: "none",
+        maxAge: 24 * 60 * 60 * 1000,
     });
+    console.log("token: ", "refreshToken");
     res.status(200).json({ accessToken });
 });
 /**

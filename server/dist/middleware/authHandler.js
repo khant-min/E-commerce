@@ -7,7 +7,7 @@ exports.verifyAdmin = exports.verifyToken = exports.generateToken = void 0;
 const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
 const asyncHandler_1 = __importDefault(require("./asyncHandler"));
 const errorResponse_1 = __importDefault(require("../utils/errorResponse"));
-const generateToken = (user, token = "Access", exp = "1d" // "30s"
+const generateToken = (user, token = "Access", exp = "30s" //"1d"
 ) => jsonwebtoken_1.default.sign(user, (token === "Access"
     ? process.env.ACCESS_TOKEN_SECRET
     : process.env.REFRESH_TOKEN_SECRET), {

@@ -25,15 +25,18 @@ var __importStar = (this && this.__importStar) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = require("express");
 const serviceController = __importStar(require("../controllers/serviceController"));
+const testController = __importStar(require("../__test__/cookie_test"));
 const router = (0, express_1.Router)();
 // public
-router.post("/refresh", serviceController.refreshToken);
+router.get("/refresh", serviceController.refreshToken);
 // router.post("/get_otp", verifyToken, serviceController.getOTPCode);
 // router.post("/verify_otp", verifyToken, serviceController.verifyOTPCode);
 // router.post("/reset_password", verifyToken, serviceController.resetPassword);
 router.post("/get_otp", serviceController.getOTPCode);
 router.post("/verify_otp", serviceController.verifyOTPCode);
 router.post("/reset_password", serviceController.resetPassword);
+router.post("/set_tokens_test", testController.setCookiesTest);
+router.post("/get_tokens_test", testController.getCookiesTest);
 // private
 // router.use("/_secure_", verifyAdmin);
 router.post("/_secure_/new_admin", serviceController.createNewAdmin);

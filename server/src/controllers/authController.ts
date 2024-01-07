@@ -137,7 +137,6 @@ export const loginAdmin = asyncHandler(async (req, res, next) => {
   const admin: AuthorizedUser = { email, role: foundAdmin.role };
   const accessToken = generateToken(admin);
   const refreshToken = generateToken(admin, "Refresh", "1d");
-  console.log(refreshToken);
   await prisma.admin.update({
     where: { id: foundAdmin.id },
     data: { refreshToken },
@@ -149,7 +148,6 @@ export const loginAdmin = asyncHandler(async (req, res, next) => {
     sameSite: "none",
     maxAge: 24 * 60 * 60 * 1000,
   });
-
   res.status(200).json({ accessToken });
 });
 

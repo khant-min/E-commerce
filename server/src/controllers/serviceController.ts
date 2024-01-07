@@ -16,10 +16,11 @@ import { generateCustomerOTP, generateAdminOTP } from "../utils/generateOTP";
  * @access public (All)
  */
 export const refreshToken = asyncHandler(async (req, res, next) => {
+  // const { role } = req.body;
   const cookies = req.cookies;
+
   if (!cookies?.jwt) return next(new ErrorResponse("Unauthorized", 401));
   const refreshToken = cookies.jwt;
-  console.log(refreshToken);
   const foundUser = await prisma.admin.findFirst({
     where: { refreshToken },
   });
