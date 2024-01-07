@@ -16,9 +16,14 @@ const router = express.Router({ mergeParams: true });
 
 const PORT = process.env.PORT || 8080;
 
+const corsOptions = {
+  origin: "http://localhost:5173", // Replace with your client's origin
+  credentials: true, // Allow cookies to be sent with requests
+};
+
 app.use(express.json());
 app.use(cookieParser());
-app.use(cors());
+app.use(cors(corsOptions));
 
 app.use("/", root);
 app.use("/auth", authRoute);

@@ -7,7 +7,7 @@ import ErrorResponse from "../utils/errorResponse";
 export const generateToken = (
   user: AuthorizedUser,
   token: string = "Access",
-  exp: string = "1d" // "30s"
+  exp: string = "30s" //"1d"
 ) =>
   jwt.sign(
     user,
