@@ -12,14 +12,14 @@ import { DataProvider } from "./context/DataProvider.tsx";
 ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.StrictMode>
     <Provider store={store}>
-      <DataProvider>
-        <BrowserRouter>
+      <BrowserRouter>
+        <DataProvider>
           <Routes>
             <Route path="/login" element={<Login />} />
             <Route element={<PageWrapper children={<App />} />} path="/*" />
           </Routes>
-        </BrowserRouter>
-      </DataProvider>
+        </DataProvider>
+      </BrowserRouter>
     </Provider>
   </React.StrictMode>
 );

@@ -1,32 +1,13 @@
-import { useEffect } from "react";
+import { Navigate } from "react-router-dom";
 import Header from "../components/header/Header";
 import Sider from "../components/sidebar/Sider";
-import { ChildrenProps } from "../types";
-import AuthService from "../services/AuthService";
-import { Navigate } from "react-router-dom";
-import { useAppSelector } from "../redux/store/store";
+import { useData } from "../context/DataProvider";
+import { ChildrenProps, DataContextProps } from "../types";
 
 export default function PageWrapper({ children }: ChildrenProps) {
-  const accessToken = useAppSelector(state => state.auth.accessToken);
-
-  const handleRefresh = async () => {
-    try {
-      await AuthService.refresh();
-    } catch (error) {
-      console.log(error);
-    }
-  };
-  useEffect(() => {
-    const firstLogin = localStorage.getItem("firstLogin");
-    if (firstLogin === "Y") {
-      console.log("res");
-      handleRefresh();
-    }
-  }, []);
-
-  // if (!accessToken) {
-  //   return <Navigate to={"/login"} />;
-  // }
+  const { user } = useData() as DataContextProps;
+  console.log("user", user);
+  if (!user) return <Navigate to="/login" />;
 
   return (
     <div>

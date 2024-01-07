@@ -1,66 +1,41 @@
-import axios, { AxiosInstance, AxiosResponse, AxiosRequestConfig } from "axios";
-import { store } from "../redux/store/store";
+import axios from "axios";
 
 class ApiService {
-  private axiosInstance: AxiosInstance;
-  private store = store;
+  private api;
+
   constructor() {
-    this.axiosInstance = axios.create({
-      // baseURL: import.meta.env.API_URL,
+    this.api = axios.create({
       baseURL: "http://localhost:8080",
-      withCredentials: true,
     });
   }
 
-  private createAuthHeaders(): { Authorization: string } {
-    const accessToken = this.store.getState().auth.accessToken;
-    return {
-      Authorization: `Bearer ${accessToken}`,
-    };
-  }
+  getCredentials() {}
 
-  private async makeRequest<T>(
-    method: AxiosRequestConfig["method"],
-    url: string,
-    data?: any
-  ): Promise<T> {
-    const headers = this.createAuthHeaders();
+  async call(end_point: string, method: string, payload: unknown = "<BLANK>") {
     try {
-      const response: AxiosResponse<T> = await this.axiosInstance.request({
-        method,
-        url,
-        headers,
-        data,
-      });
-      return response.data;
-    } catch (error) {
-      throw error;
+      let response;
+      switch (method) {
+        case "GET":
+          response = await this.api.get(end_point);
+          break;
+        case "POST":
+          response = await this.api.post(end_point, payload);
+          break;
+        case "UPDATE":
+          response = await this.api.put(end_point, payload);
+          break;
+        case "DELETE":
+          response = await this.api.delete(end_point);
+          break;
+        default:
+          console.log("Invalid call");
+          break;
+      }
+      return Promise.resolve(response!.data);
+    } catch (err) {
+      return Promise.reject(err);
     }
-  }
-
-  public async call<T>(
-    method: AxiosRequestConfig["method"],
-    url: string,
-    data?: any
-  ): Promise<T> {
-    return this.makeRequest<T>(method, url, data);
   }
 }
 
 export default new ApiService();
-
-// import axios from "axios";
-
-// class ApiService {
-//   private api;
-
-//   constructor() {
-//     this.api = axios.create({
-//       baseURL: "http://localhost:8080",
-//     });
-//   }
-
-//   getCredentials() {}
-// }
-
-// export default new ApiService();

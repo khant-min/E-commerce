@@ -12,9 +12,9 @@ import Grid from "@mui/material/Grid";
 import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import Typography from "@mui/material/Typography";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
-import AuthService from "../../services/AuthService";
-import { Navigate, NavigateFunction, useNavigate } from "react-router-dom";
-import { useAppSelector } from "../../redux/store/store";
+import { DataContextProps, UserCredentials } from "../../types";
+import { useData } from "../../context/DataProvider";
+import { Navigate } from "react-router-dom";
 
 function Copyright(props: any) {
   return (
@@ -38,34 +38,27 @@ function Copyright(props: any) {
 const defaultTheme = createTheme();
 
 export default function Login() {
-  const navigate: NavigateFunction = useNavigate();
-  const accessToken = useAppSelector(state => state.auth.accessToken);
+  const { user, login } = useData() as DataContextProps;
 
-  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
-    const data = new FormData(event.currentTarget);
-    const payload = {
+  if (user) return <Navigate to="/" />;
+
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    console.log("submit");
+    e.preventDefault();
+    const data = new FormData(e.currentTarget);
+
+    const payload: UserCredentials = {
       email: data.get("email") as string,
       password: data.get("password") as string,
       role: "ADMIN",
     };
-    // console.log({
-    //   email: data.get("email"),
-    //   password: data.get("password"),
-    // });
-    try {
-      await AuthService.login(payload);
 
-      // AccessTokenService.setAccessToken(res.accessToken as string);
-      navigate("/");
+    try {
+      login(payload);
     } catch (error) {
       console.log(error);
     }
   };
-
-  if (accessToken) {
-    return <Navigate to={"/"} />;
-  }
 
   return (
     <ThemeProvider theme={defaultTheme}>
