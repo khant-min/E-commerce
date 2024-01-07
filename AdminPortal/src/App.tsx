@@ -3,6 +3,9 @@ import "./index.css";
 import User from "./__test__/User";
 
 const Home = () => {
+  return <div>home</div>;
+};
+const Customers = () => {
   return (
     <div>
       <User />
@@ -16,6 +19,7 @@ export default function App() {
       <section>
         <Routes>
           <Route path="/" element={<Home />} />
+          <Route path="/customers" element={<Customers />} />
         </Routes>
       </section>
     </div>
