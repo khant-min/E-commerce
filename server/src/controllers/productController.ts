@@ -2,6 +2,7 @@ import { ProductProps } from "../types";
 import asyncHandler from "../middleware/asyncHandler";
 import ErrorResponse from "../utils/errorResponse";
 import prisma from "../utils/prisma";
+import { logger } from "../middleware/logHandler";
 
 /**
  * Get All Products
@@ -21,9 +22,11 @@ export const getAllProducts = asyncHandler(async (req, res, next) => {
  * @returns successful message
  */
 export const createProduct = asyncHandler(async (req, res, next) => {
-  const { name, brand, category }: ProductProps = req.body;
+  console.log("body: ", req.body);
+  const { name, description, price, image, brand, category }: ProductProps =
+    req.body;
 
-  if (!name || !brand || !category)
+  if (!name || !brand || !category || !description || !price || !image)
     return next(new ErrorResponse("Please fill all required fields", 400));
 
   await prisma.product.create({

@@ -12,6 +12,9 @@ export interface ProductProps {
   name: string;
   brand: string;
   category: string;
+  description: string;
+  price: string;
+  image: string;
 }
 
 export interface AuthorizedUser {

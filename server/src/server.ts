@@ -20,8 +20,8 @@ const router = express.Router({ mergeParams: true });
 const PORT = process.env.PORT || 8080;
 
 app.use(logger);
-app.use(credentials);
-app.use(cors(corsOptions));
+// app.use(credentials);
+// app.use(cors(corsOptions));
 app.use(express.json());
 app.use(cookieParser());
 
@@ -29,7 +29,7 @@ app.use("/", root);
 app.use("/auth", authRoute);
 
 router.use("/services", serviceRoute);
-router.use(verifyToken);
+// router.use(verifyToken);
 router.use("/products", productRoute);
 router.use("/customers", customerRoute);
 

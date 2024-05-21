@@ -8,12 +8,18 @@ generator client {
 datasource db {
   provider = "mysql"
   url      = env("DATABASE_URL")
-  shadowDatabaseUrl = env("SHADOW_DATABASE_URL")
+  // shadowDatabaseUrl = env("SHADOW_DATABASE_URL")
 }
 
 enum Role {
   CUSTOMER
   ADMIN
+}
+
+enum OrderStatus {
+  PROCESSING
+  SHIPPED
+  CANCELED
 }
 
 model Customer {
@@ -68,4 +74,17 @@ model Admin {
   refreshToken String   @default("") @db.VarChar(200)
   createdAt    DateTime @default(now())
   updatedAt    DateTime @updatedAt
+}
+
+model Order {
+  id            Int         @id @default(autoincrement())
+  customerId    Int
+  productId     Int
+  quantity      Int
+  price         Int
+  totalAmt      Int
+  orderDate     DateTime    @default(now())
+  orderStatus   OrderStatus
+  paymentMehtod String      @db.VarChar(40)
+  orderNotes    String      @db.VarChar(100)
 }
