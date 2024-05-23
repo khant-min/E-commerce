@@ -4,9 +4,11 @@ import SettingsOutlinedIcon from "@mui/icons-material/SettingsOutlined";
 import NightlightIcon from "@mui/icons-material/Nightlight";
 import { Avatar } from "@mui/material";
 import "./Header.css";
-import Typography from "@mui/material/Typography";
+import PersonIcon from "@mui/icons-material/Person";
+import LogoutIcon from "@mui/icons-material/Logout";
 import { useAuth } from "../../context/AuthProvider";
 import { AuthContextProps } from "../../types";
+import { Link } from "react-router-dom";
 
 export default function Header() {
   const { logout } = useAuth() as AuthContextProps;
@@ -17,36 +19,27 @@ export default function Header() {
   };
 
   return (
-    <header className="p-4 shadow-lg">
+    <header className="py-2.5 px-4 shadow-lg">
       <div className="wrapper" style={{}}>
         <div className="left gap-20">
-          <div>
-            <h2 className="font-bold text-2xl">Architect</h2>
-          </div>
-          <div>
-            <MenuRoundedIcon />
-          </div>
+          <h2 className="ml-20 font-semibold text-xl">E-com</h2>
           <div>
             <div>
-              <SettingsOutlinedIcon />
-              <Typography>Settings</Typography>
+              {/* <SettingsOutlinedIcon /> */}
+              {/* <Typography>Settings</Typography> */}
             </div>
           </div>
         </div>
-        <div className="right gap-20">
+        <div className="right gap-16">
+          <div>
+            <Link to="/profile">
+              <PersonIcon />
+            </Link>
+          </div>
           <div>
             <button onClick={handleLogout} className="border-cyan-400">
-              Logout
+              <LogoutIcon />
             </button>
-          </div>
-          <div>
-            <Avatar alt="K" src="/static/images/avatar/1.jpg" />
-          </div>
-          <div>
-            <NightlightIcon />
-          </div>
-          <div>
-            <MenuRoundedIcon />
           </div>
         </div>
       </div>

@@ -2,6 +2,7 @@ import { Routes, Route } from "react-router-dom";
 import "./index.css";
 import User from "./__test__/User";
 import { Dashboard, CustomersPage, ProductPage } from "./containers";
+import CreateProduct from "./containers/NewProduct";
 
 export default function App() {
   return (
@@ -9,9 +10,9 @@ export default function App() {
       <section className="w-full">
         <Routes>
           <Route path="/" element={<Dashboard />} />
-          <Route path="/users" element={<User />} />
           <Route path="/customers" element={<CustomersPage />} />
           <Route path="/products" element={<ProductPage />} />
+          <Route path="/create" element={<CreateProduct />} />
         </Routes>
       </section>
     </div>

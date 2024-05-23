@@ -8,7 +8,7 @@ import { ChildrenProps, AuthContextProps } from "../types";
 export default function PageWrapper({ children }: ChildrenProps) {
   const { user, setAuth } = useAuth() as AuthContextProps;
 
-  if (!user) return <Navigate to="/login" />;
+  // if (!user) return <Navigate to="/login" />;
 
   useEffect(() => {
     setAuth(user);
@@ -17,9 +17,8 @@ export default function PageWrapper({ children }: ChildrenProps) {
   return (
     <div>
       <Header />
-      <div className="flex gap-10">
-        <Sider />
-        <div className="w-full mt-10">{children}</div>
+      <div className="w-full flex gap-10">
+        <Sider>{children}</Sider>
       </div>
     </div>
   );
