@@ -61,7 +61,7 @@ const Sidebar: React.FC<{ children: React.ReactNode }> = ({ children }) => {
         </Box>
         <List>
           <Link to="/">
-            <NavItem icon={<Home />} label="Home" isOpen={isOpen} />
+            <NavItem icon={<Home />} label="Dashboard" isOpen={isOpen} />
           </Link>
           <Link to="/users">
             <NavItem icon={<TrendingUp />} label="Trending" isOpen={isOpen} />

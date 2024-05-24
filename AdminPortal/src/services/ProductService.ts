@@ -3,8 +3,7 @@ import ApiService from "./ApiService";
 class ProductService {
   async getList() {
     try {
-      const res = await ApiService.call("/api/products/secure", "GET");
-      console.log(res);
+      const res = await ApiService.call("/api/products", "GET");
 
       return {
         success: true,

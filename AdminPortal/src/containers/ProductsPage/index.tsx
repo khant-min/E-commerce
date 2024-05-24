@@ -1,22 +1,40 @@
-import { Box } from "@mui/material";
+import { useEffect, useState } from "react";
+import ProductService from "../../services/ProductService";
+import { Button } from "@mui/material";
 
-export default function index() {
+export default function Product() {
+  const [products, setProducts] = useState([]);
+
+  const fetchData = async () => {
+    const res = await ProductService.getList();
+    setProducts(res.data);
+  };
+
+  useEffect(() => {
+    fetchData();
+  }, []);
   return (
     <div>
-      <Box className="w-[95%] h-[250px] shadow-lg p-6 flex justify-between items-center">
-        <div>
-          <h3 className="text-4xl">1.76M</h3>
-          <p>5.4% Fees Earning</p>
+      {products ? (
+        <div className="flex items-center justify-between flex-wrap gap-10">
+          {products.map((product: any) => (
+            <div className="" key={product.id}>
+              <img className="w-80" src={product.image} alt={product.name} />
+              <h5>{product.name}</h5>
+              <p>{product.description}</p>
+              <span>${product.price}</span>
+              <div>
+                <Button variant="contained">Edit</Button>
+                <Button variant="contained" color="error">
+                  Delete
+                </Button>
+              </div>
+            </div>
+          ))}
         </div>
-        <div>
-          <h3 className="text-4xl">1.76M</h3>
-          <p>4% Grow Rate</p>
-        </div>
-        <div>
-          <h3 className="text-4xl">$342</h3>
-          <p>3% Investment</p>
-        </div>
-      </Box>
+      ) : (
+        <div>There is no products yet</div>
+      )}
     </div>
   );
 }

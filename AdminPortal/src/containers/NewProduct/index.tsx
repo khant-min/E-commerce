@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { ReactNode, useEffect, useState } from "react";
 import {
   Box,
   Button,
@@ -10,6 +10,7 @@ import {
   FormControl,
   InputLabel,
   FormHelperText,
+  SelectChangeEvent,
 } from "@mui/material";
 import { ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
 import { storage } from "../../firebase";
@@ -33,7 +34,7 @@ const CreateProduct: React.FC = () => {
     brand: "",
     category: "",
   });
-  const [file, setFile] = useState();
+  const [file, setFile] = useState<Blob>();
   const [imageUrl, setImageUrl] = useState("");
 
   const handleChange = (
@@ -43,9 +44,7 @@ const CreateProduct: React.FC = () => {
     setProduct({ ...product, [name]: value });
   };
 
-  const handleSelectChange = (
-    e: React.ChangeEvent<{ name?: string; value: unknown }>
-  ) => {
+  const handleSelectChange = (e: SelectChangeEvent<string>) => {
     const name = e.target.name as keyof typeof product;
     setProduct({ ...product, [name]: e.target.value as string });
   };
@@ -63,7 +62,7 @@ const CreateProduct: React.FC = () => {
     const uploadImage = () => {
       const name = new Date().getTime() + file!.name;
       console.log(name);
-      const storageRef = ref(storage, file.name);
+      const storageRef = ref(storage, file!.name);
       const uploadTask = uploadBytesResumable(storageRef, file!);
 
       uploadTask.on(
