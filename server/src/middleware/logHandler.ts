@@ -7,7 +7,7 @@ import asyncHandler from "./asyncHandler";
 
 export const logEvents = async (message: string, logName: string) => {
   const dateTime = `${format(new Date(), "yyyyMMdd\tHH:mm:ss")}`;
-  const logItem = `${dateTime}\t${uuid()}\t${message}`;
+  const logItem = `${dateTime}\t${uuid()}\t${message}\n`;
 
   try {
     if (!fs.existsSync(path.join(__dirname, "..", "logs"))) {
@@ -23,6 +23,6 @@ export const logEvents = async (message: string, logName: string) => {
 };
 
 export const logger = asyncHandler(async (req, res, next) => {
-  logEvents(`${req.method}\t${req.headers.origin}\t${req.url}`, "reqLog.txt");
+  logEvents(`${req.method}\t${req.headers.origin}\t${req.url}\n`, "reqLog.txt");
   next();
 });

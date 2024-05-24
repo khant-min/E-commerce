@@ -11,7 +11,7 @@ export interface AdminProps extends CustomerProps {}
 export interface ProductProps {
   name: string;
   brand: string;
-  category: string;
+  categoryId: number;
   description: string;
   price: string;
   image: string;

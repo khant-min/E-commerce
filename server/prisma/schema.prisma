@@ -48,12 +48,22 @@ model Profile {
 model Product {
   id           Int            @id @default(autoincrement())
   name         String         @db.VarChar(25)
+  description  String
   brand        String         @db.VarChar(25)
-  category     String         @db.VarChar(30)
+  categoryId   Int
+  category     Category       @relation(fields: [categoryId], references: [id])
+  price        String         @db.VarChar(20)
+  image        String
   customer     Customer[]
   shoppingCart ShoppingCart[]
   createdAt    DateTime       @default(now())
-  updatedAt    DateTime       @updatedAt
+  updatedAt    DateTime       @updatedAt()
+}
+
+model Category {
+  id      Int       @id @default(autoincrement())
+  name    String    @db.VarChar(20)
+  product Product[]
 }
 
 model ShoppingCart {

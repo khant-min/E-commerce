@@ -2,7 +2,6 @@ import { ProductProps } from "../types";
 import asyncHandler from "../middleware/asyncHandler";
 import ErrorResponse from "../utils/errorResponse";
 import prisma from "../utils/prisma";
-import { logger } from "../middleware/logHandler";
 
 /**
  * Get All Products
@@ -22,15 +21,14 @@ export const getAllProducts = asyncHandler(async (req, res, next) => {
  * @returns successful message
  */
 export const createProduct = asyncHandler(async (req, res, next) => {
-  console.log("body: ", req.body);
-  const { name, description, price, image, brand, category }: ProductProps =
+  const { name, description, price, image, brand, categoryId }: ProductProps =
     req.body;
 
-  if (!name || !brand || !category || !description || !price || !image)
+  if (!name || !brand || !categoryId || !description || !price || !image)
     return next(new ErrorResponse("Please fill all required fields", 400));
 
   await prisma.product.create({
-    data: { name, brand, category },
+    data: { name, description, price, image, brand, categoryId },
   });
 
   res.status(201).json({ message: "New product created successfully" });
@@ -43,7 +41,8 @@ export const createProduct = asyncHandler(async (req, res, next) => {
  * @returns successful message
  */
 export const updateProduct = asyncHandler(async (req, res, next) => {
-  const { id, name, brand, category }: ProductProps & { id: number } = req.body;
+  const { id, name, brand, categoryId }: ProductProps & { id: number } =
+    req.body;
 
   if (!id) return next(new ErrorResponse("Product ID is required", 400));
 
@@ -56,7 +55,7 @@ export const updateProduct = asyncHandler(async (req, res, next) => {
 
   await prisma.product.update({
     where: { id: product.id },
-    data: { name, brand, category },
+    data: { name, brand, categoryId },
   });
 
   res.status(200).json({ message: "Product updated successfully" });
@@ -98,4 +97,16 @@ export const getAProduct = asyncHandler(async (req, res, next) => {
     return next(new ErrorResponse("Invalid product ID", 400));
 
   res.status(200).json(product);
+});
+
+export const getProductByCategory = asyncHandler(async (req, res, next) => {
+  const { id } = req.body;
+
+  if (!id) return next(new ErrorResponse("Category not found", 404));
+
+  const products = await prisma.product.findUnique({
+    where: { id },
+  });
+
+  res.status(200).json({ products });
 });

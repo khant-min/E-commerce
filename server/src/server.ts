@@ -5,6 +5,7 @@ import root from "./routes/root";
 import productRoute from "./routes/productRoute";
 import customerRoute from "./routes/customerRoute";
 import serviceRoute from "./routes/serviceRoute";
+import analyzeRoute from "./routes/analyzeRoute";
 import notFound from "./routes/notFound";
 import errorHandler from "./middleware/errorHandler";
 import { verifyToken } from "./middleware/authHandler";
@@ -21,7 +22,7 @@ const PORT = process.env.PORT || 8080;
 
 app.use(logger);
 // app.use(credentials);
-// app.use(cors(corsOptions));
+app.use(cors(corsOptions));
 app.use(express.json());
 app.use(cookieParser());
 
@@ -32,6 +33,7 @@ router.use("/services", serviceRoute);
 // router.use(verifyToken);
 router.use("/products", productRoute);
 router.use("/customers", customerRoute);
+router.use("/analyze", analyzeRoute);
 
 app.use("/api", router);
 app.use("*", notFound);

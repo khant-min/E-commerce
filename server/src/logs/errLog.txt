@@ -1,1 +1,154 @@
-20240521	22:50:06	c771b8cb-ae38-4669-97a9-6cb5f495ba9a	TypeError: Cannot destructure property 'name' of 'req.body' as it is undefined.20240521	22:51:20	c8356fb9-69f0-4ce9-9f22-5fef71b8111a	TypeError: Cannot destructure property 'name' of 'req.body' as it is undefined.20240521	22:51:30	f28434bd-b317-431d-ba9f-eb88a736d8a7	TypeError: Cannot destructure property 'name' of 'req.body' as it is undefined.20240521	22:51:58	22fced35-a7f8-4954-ae34-b286f37c607c	TypeError: Cannot destructure property 'name' of 'req.body' as it is undefined.
+20240523	11:59:15	bd000198-b2a8-4f44-aad5-20d9e99538aa	Error: Please fill all required fields
+20240523	12:09:39	88918911-7c9c-4065-9b38-60704e6276b8	Error: Please fill all required fields
+20240523	12:14:45	e69256ab-d0b2-4fce-a8a9-943f6d8add91	Error: Please fill all required fields
+20240523	12:16:02	1b02d541-9938-41b0-a78b-a2dd373c6e1b	Error: Please fill all required fields
+20240523	12:19:54	f7d4da53-4456-42f1-8e3b-495f0276dd65	PrismaClientValidationError: 
+Invalid `prisma.product.create()` invocation in
+C:\Users\Khant Min Thu\Documents\Personal\E-commerce\server\src\controllers\productController.ts:31:24
+
+  28 if (!name || !brand || !category || !description || !price || !image)
+  29   return next(new ErrorResponse("Please fill all required fields", 400));
+  30 
+→ 31 await prisma.product.create({
+       data: {
+         name: "Super",
+         description: "adf",
+         price: "1",
+                ~~~
+         image: "https://firebasestorage.googleapis.com/v0/b/e-commerce-5ef72.appspot.com/o/qr.jpg?alt=media&token=66ce55cf-f0aa-402c-91df-0e0149ddbc77",
+         brand: "asdf",
+         category: "fashion"
+       }
+     })
+
+Argument `price`: Invalid value provided. Expected Int, provided String.
+20240523	12:20:28	16fae54f-42a7-4f20-ac4d-69bab6b53079	PrismaClientValidationError: 
+Invalid `prisma.product.create()` invocation in
+C:\Users\Khant Min Thu\Documents\Personal\E-commerce\server\src\controllers\productController.ts:31:24
+
+  28 if (!name || !brand || !category || !description || !price || !image)
+  29   return next(new ErrorResponse("Please fill all required fields", 400));
+  30 
+→ 31 await prisma.product.create({
+       data: {
+         name: "Super",
+         description: "adf",
+         price: "0",
+                ~~~
+         image: "https://firebasestorage.googleapis.com/v0/b/e-commerce-5ef72.appspot.com/o/qr.jpg?alt=media&token=66ce55cf-f0aa-402c-91df-0e0149ddbc77",
+         brand: "asdf",
+         category: "fashion"
+       }
+     })
+
+Argument `price`: Invalid value provided. Expected Int, provided String.
+20240523	12:21:18	c1544b8e-027f-4136-a3cd-f6ba6b9e4866	Error: Please fill all required fields
+20240523	12:21:39	00e17dfa-2e49-4257-8179-ef73d8a778b1	PrismaClientValidationError: 
+Invalid `prisma.product.create()` invocation in
+C:\Users\Khant Min Thu\Documents\Personal\E-commerce\server\src\controllers\productController.ts:31:24
+
+  28 if (!name || !brand || !category || !description || !price || !image)
+  29   return next(new ErrorResponse("Please fill all required fields", 400));
+  30 
+→ 31 await prisma.product.create({
+       data: {
+         name: "Super",
+         description: "asdf",
+         price: "23",
+                ~~~~
+         image: "https://firebasestorage.googleapis.com/v0/b/e-commerce-5ef72.appspot.com/o/qr.jpg?alt=media&token=68e7719f-db03-4ea4-8c01-437c787ec6be",
+         brand: "bracd",
+         category: "electronics"
+       }
+     })
+
+Argument `price`: Invalid value provided. Expected Int, provided String.
+20240523	12:21:46	4acd2028-c01e-4682-8139-ed6dc0507d59	PrismaClientValidationError: 
+Invalid `prisma.product.create()` invocation in
+C:\Users\Khant Min Thu\Documents\Personal\E-commerce\server\src\controllers\productController.ts:31:24
+
+  28 if (!name || !brand || !category || !description || !price || !image)
+  29   return next(new ErrorResponse("Please fill all required fields", 400));
+  30 
+→ 31 await prisma.product.create({
+       data: {
+         name: "Super",
+         description: "asdf",
+         price: "0",
+                ~~~
+         image: "https://firebasestorage.googleapis.com/v0/b/e-commerce-5ef72.appspot.com/o/qr.jpg?alt=media&token=68e7719f-db03-4ea4-8c01-437c787ec6be",
+         brand: "bracd",
+         category: "electronics"
+       }
+     })
+
+Argument `price`: Invalid value provided. Expected Int, provided String.
+20240523	12:21:52	a536d55a-c898-48af-b76d-942aef14f654	PrismaClientValidationError: 
+Invalid `prisma.product.create()` invocation in
+C:\Users\Khant Min Thu\Documents\Personal\E-commerce\server\src\controllers\productController.ts:31:24
+
+  28 if (!name || !brand || !category || !description || !price || !image)
+  29   return next(new ErrorResponse("Please fill all required fields", 400));
+  30 
+→ 31 await prisma.product.create({
+       data: {
+         name: "Super",
+         description: "asdf",
+         price: "1",
+                ~~~
+         image: "https://firebasestorage.googleapis.com/v0/b/e-commerce-5ef72.appspot.com/o/qr.jpg?alt=media&token=68e7719f-db03-4ea4-8c01-437c787ec6be",
+         brand: "bracd",
+         category: "electronics"
+       }
+     })
+
+Argument `price`: Invalid value provided. Expected Int, provided String.
+20240523	12:24:02	bb72a836-9bb1-48c9-a656-f61cd02566de	PrismaClientValidationError: 
+Invalid `prisma.product.create()` invocation in
+C:\Users\Khant Min Thu\Documents\Personal\E-commerce\server\src\controllers\productController.ts:31:24
+
+  28 if (!name || !brand || !category || !description || !Number(price) || !image)
+  29   return next(new ErrorResponse("Please fill all required fields", 400));
+  30 
+→ 31 await prisma.product.create({
+       data: {
+         name: "Super",
+         description: "asdf",
+         price: "1",
+                ~~~
+         image: "https://firebasestorage.googleapis.com/v0/b/e-commerce-5ef72.appspot.com/o/qr.jpg?alt=media&token=68e7719f-db03-4ea4-8c01-437c787ec6be",
+         brand: "bracd",
+         category: "electronics"
+       }
+     })
+
+Argument `price`: Invalid value provided. Expected Int, provided String.
+20240523	21:58:23	d05eadb8-8a97-475e-8a9d-439d9b4d9f6b	PrismaClientValidationError: 
+Invalid `prisma.product.findUnique()` invocation in
+C:\Users\Khant Min Thu\Documents\Personal\E-commerce\server\src\controllers\productController.ts:92:40
+
+  89 
+  90 if (!id) return next(new ErrorResponse("Product not found", 404));
+  91 
+→ 92 const product = await prisma.product.findUnique({
+       where: {
+     +   id: Int
+       }
+     })
+
+Argument `id` is missing.
+20240523	21:58:23	20de3f37-af68-4087-948d-e08ea9d7ef8d	PrismaClientValidationError: 
+Invalid `prisma.product.findUnique()` invocation in
+C:\Users\Khant Min Thu\Documents\Personal\E-commerce\server\src\controllers\productController.ts:92:40
+
+  89 
+  90 if (!id) return next(new ErrorResponse("Product not found", 404));
+  91 
+→ 92 const product = await prisma.product.findUnique({
+       where: {
+     +   id: Int
+       }
+     })
+
+Argument `id` is missing.
+20240523	22:08:24	034b71d0-a961-4dcb-a87e-db9511712e74	Error: Please fill all required fields
