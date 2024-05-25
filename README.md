@@ -1,7 +1,3 @@
-## Contributors
+# E-commerce
 
-### Htet Wai Yan
-
-### Swam Htet Aung
-
-### Khant Min Thu
+### Your Digital Marketplace
