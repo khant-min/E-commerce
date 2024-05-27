@@ -17,6 +17,10 @@ export default function Register() {
         flexDirection: "row",
         gap: "40px",
         boxShadow: "0px 4px 20px rgba(0, 0, 0, 0.4)",
+        maxWidth: "1280px",
+        margin: "20px auto",
+        padding: "1.5rem",
+        textAlign: "center",
       }}
     >
       <div style={{ width: "50%" }}>
