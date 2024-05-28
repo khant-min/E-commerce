@@ -1,9 +1,9 @@
-import { Route, Router, Routes } from "react-router-dom";
-import Register from "./containers/register/Register";
-import Login from "./containers/login/Login";
-import AppContainer from "./hoc/AppContainer";
+import { Route, Routes } from "react-router-dom";
 import Home from "./containers/home/Home";
+import Login from "./containers/login/Login";
 import Products from "./containers/products/Products";
+import Register from "./containers/register/Register";
+import AppContainer from "./hoc/AppContainer";
 
 export default function App() {
   return (
@@ -12,6 +12,7 @@ export default function App() {
         <Route path="/register" element={<Register />} />
         <Route path="/login" element={<Login />} />
         <Route path="/" element={<AppContainer />}>
+          {/* these guys will be rendered in the place of Outlet */}
           <Route index element={<Home />} />
           <Route path="/products" element={<Products />} />
         </Route>

@@ -3,7 +3,6 @@ import {
   Card,
   Checkbox,
   FormControl,
-  FormHelperText,
   FormLabel,
   Heading,
   Input,
