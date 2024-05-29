@@ -1,6 +1,7 @@
 import { Route, Routes } from "react-router-dom";
 import Home from "./containers/home/Home";
 import Login from "./containers/login/Login";
+import ProductDetail from "./containers/products/ProductDetail";
 import Products from "./containers/products/Products";
 import Register from "./containers/register/Register";
 import AppContainer from "./hoc/AppContainer";
@@ -18,6 +19,7 @@ export default function App() {
           <Route path="/products" element={<Products />} />
           <Route path="/checkout" element={<Checkout />} />
         </Route>
+        <Route path="/products/:id" element={<ProductDetail />} />
       </Routes>
     </div>
   );
