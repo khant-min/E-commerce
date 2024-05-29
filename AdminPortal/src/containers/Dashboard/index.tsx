@@ -1,13 +1,46 @@
+import { useEffect, useState } from "react";
+import AnalyzeService from "../../services/AnalyzeService";
+
+interface AnalyzeData {
+  customers: number;
+  products: number;
+  visitors: number;
+}
+
 export default function HomePage() {
+  const [analyzedData, setAnalyzedData] = useState<AnalyzeData>();
+
+  const fetchData = async () => {
+    const res = await AnalyzeService.getList();
+    console.log("res: ", res);
+    setAnalyzedData(res.data);
+  };
+
+  useEffect(() => {
+    fetchData();
+  }, []);
+
   return (
-    <div className="w-[60%] shadow-lg p-6 flex justify-between items-center">
-      <div>
-        <h2 className="text-4xl font-sans">2.5M Viwers</h2>
-        <p className="text-green-400">4% Up</p>
+    <div className="flex justify-between items-center">
+      <div className="shadow-lg p-6">
+        <h2 className="text-4xl font-sans">144 Visitors</h2>
+        <p className="text-green-500 text-lg font-semibold text-end">12% Up</p>
       </div>
-      <div>
-        <h2 className="text-4xl font-sans">32M Visitors</h2>
-        <p className="text-green-400">10% Up</p>
+      <div className="shadow-lg p-6">
+        <h2 className="text-4xl font-sans">
+          {analyzedData?.customers} Customers
+        </h2>
+        <p className="text-green-500 text-lg font-semibold text-end">4% Up</p>
+      </div>
+      <div className="shadow-lg p-6">
+        <h2 className="text-4xl font-sans">
+          {analyzedData?.products} Products
+        </h2>
+        <p className="text-green-500 text-lg font-semibold text-end">10% Up</p>
+      </div>
+      <div className="shadow-lg p-6">
+        <h2 className="text-4xl font-sans">12 Categories</h2>
+        <p className="text-green-500 text-lg font-semibold text-end">10% Up</p>
       </div>
     </div>
   );

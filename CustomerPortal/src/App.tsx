@@ -4,6 +4,7 @@ import Login from "./containers/login/Login";
 import Products from "./containers/products/Products";
 import Register from "./containers/register/Register";
 import AppContainer from "./hoc/AppContainer";
+import Checkout from "./containers/checkout/Checkout";
 
 export default function App() {
   return (
@@ -15,6 +16,7 @@ export default function App() {
           {/* these guys will be rendered in the place of Outlet */}
           <Route index element={<Home />} />
           <Route path="/products" element={<Products />} />
+          <Route path="/checkout" element={<Checkout />} />
         </Route>
       </Routes>
     </div>

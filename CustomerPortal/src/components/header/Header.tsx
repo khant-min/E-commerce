@@ -1,4 +1,6 @@
 import { Link } from "react-router-dom";
+import { FaShoppingCart } from "react-icons/fa";
+import { RiLogoutBoxRLine } from "react-icons/ri";
 
 export default function Header() {
   return (
@@ -18,6 +20,16 @@ export default function Header() {
           <Link to="/">About</Link>
         </li>
       </ul>
+      <div className="flex justify-between items-center gap-10">
+        <button>
+          <Link to="/checkout">
+            <FaShoppingCart className="w-5 h-5" />
+          </Link>
+        </button>
+        <button>
+          <RiLogoutBoxRLine className="w-5 h-5" />
+        </button>
+      </div>
     </div>
   );
 }
