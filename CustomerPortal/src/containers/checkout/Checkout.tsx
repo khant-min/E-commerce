@@ -68,7 +68,7 @@ export default function Checkout() {
                 </HStack>
                 <Text>${product.price}</Text>
                 <Button color="red">
-                  <MdDelete />
+                  <MdDelete className="w-6 h-6" />
                 </Button>
               </Box>
             </Box>
