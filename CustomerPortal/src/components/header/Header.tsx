@@ -2,7 +2,7 @@ import { Link as RouterLink } from "react-router-dom";
 import { FaShoppingCart } from "react-icons/fa";
 import { RiLogoutBoxRLine } from "react-icons/ri";
 import { FaUser } from "react-icons/fa";
-import { Box, Text, Tooltip, Flex, Button, Link } from "@chakra-ui/react";
+import { Box, Button, Link } from "@chakra-ui/react";
 import { Input } from "@chakra-ui/react";
 
 const categorieslist = ["Electrinies", "Fruits", "Vegetables"];
