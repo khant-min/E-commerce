@@ -22,6 +22,17 @@ enum OrderStatus {
   CANCELED
 }
 
+enum StockStatus {
+  INSTOCK
+  OUTOFSTOCK
+}
+
+enum PaymentMethod {
+  KPAY
+  WAVEPAY
+  PAYPAL
+}
+
 model Customer {
   id           Int           @id @default(autoincrement())
   name         String        @db.VarChar(20)
@@ -29,7 +40,7 @@ model Customer {
   password     String        @db.VarChar(100)
   role         Role          @default(CUSTOMER)
   phoneNumber  String        @unique @db.VarChar(15)
-  product      Product[]
+  orders       Order[]
   shoppingCart ShoppingCart?
   profile      Profile?
   refreshToken String        @default("")
@@ -45,19 +56,49 @@ model Profile {
   customerId Int      @unique
 }
 
+model Images {
+  id        Int     @id @default(autoincrement())
+  image     String
+  productId Int
+  product   Product @relation(fields: [productId], references: [id])
+}
+
+model Supplier {
+  id       Int       @id @default(autoincrement())
+  name     String    @db.VarChar(25)
+  phone    String    @db.VarChar(20)
+  email    String    @unique @db.VarChar(25)
+  products Product[]
+}
+
 model Product {
-  id           Int            @id @default(autoincrement())
-  name         String         @db.VarChar(25)
-  description  String
-  brand        String         @db.VarChar(25)
-  categoryId   Int
-  category     Category       @relation(fields: [categoryId], references: [id])
-  price        String         @db.VarChar(20)
-  image        String
-  customer     Customer[]
-  shoppingCart ShoppingCart[]
-  createdAt    DateTime       @default(now())
-  updatedAt    DateTime       @updatedAt()
+  id                Int            @id @default(autoincrement())
+  sku               String         @db.VarChar(25)
+  name              String         @db.VarChar(25)
+  description       String
+  brand             String         @db.VarChar(25)
+  categoryId        Int
+  category          Category       @relation(fields: [categoryId], references: [id])
+  costPrice         String         @db.VarChar(20)
+  sellPrice         String         @db.VarChar(20)
+  images            Images[]
+  quantityInStock   Int
+  weight            String         @db.VarChar(10)
+  size              String         @db.VarChar(25)
+  color             String         @db.VarChar(25)
+  material          String         @db.VarChar(25)
+  expirationDate    String         @db.VarChar(15)
+  warehouseLocation String         @db.VarChar(50)
+  stockStatus       StockStatus    @default(INSTOCK)
+  width             String         @db.VarChar(10)
+  height            String         @db.VarChar(10)
+  length            String         @db.VarChar(10)
+  supplierId        Int
+  supplier          Supplier       @relation(fields: [supplierId], references: [id])
+  shoppingCart      ShoppingCart[]
+  addedDates        DateTime
+  createdAt         DateTime       @default(now())
+  updatedAt         DateTime       @updatedAt()
 }
 
 model Category {
@@ -86,15 +127,33 @@ model Admin {
   updatedAt    DateTime @updatedAt
 }
 
+model OrderItem {
+  id         Int   @id @default(autoincrement())
+  quantity   Int
+  unitPrice  Float
+  totalPrice Float
+  order      Order @relation(fields: [orderId], references: [id])
+  orderId    Int
+}
+
 model Order {
-  id            Int         @id @default(autoincrement())
-  customerId    Int
-  productId     Int
-  quantity      Int
-  price         Int
-  totalAmt      Int
-  orderDate     DateTime    @default(now())
-  orderStatus   OrderStatus
-  paymentMehtod String      @db.VarChar(40)
-  orderNotes    String      @db.VarChar(100)
+  id              Int           @id @default(autoincrement())
+  orderDate       DateTime      @default(now())
+  orderStatus     OrderStatus
+  customerId      Int
+  customer        Customer      @relation(fields: [customerId], references: [id])
+  orderItems      OrderItem[]
+  subtotal        Float
+  discounts       Float
+  taxes           Float
+  shippingCost    Float
+  totalAmount     Float
+  shippingAddress String        @db.VarChar(100)
+  paymentMethod   PaymentMethod
+  orderNotes      String        @db.VarChar(100)
+}
+
+model Analyze {
+  id       Int @id @default(autoincrement())
+  visitors Int
 }

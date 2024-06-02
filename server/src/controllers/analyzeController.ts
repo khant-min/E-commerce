@@ -9,3 +9,5 @@ export const systemInfo = asyncHandler(async (req, res, next) => {
   const products = await prisma.product.count();
   res.status(200).json({ customers, products });
 });
+
+export const addVisitor = asyncHandler(async (req, res, next) => {});

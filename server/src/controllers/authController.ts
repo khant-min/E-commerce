@@ -64,6 +64,8 @@ export const loginCustomer = asyncHandler(async (req, res, next) => {
   if (!matchPassword)
     return next(new ErrorResponse("Credentials are invalid", 401));
 
+  console.log(process.env.ACCESS_TOKEN_SECRET);
+
   const cus: AuthorizedUser = { email, role: foundCustomer.role };
   const accessToken = generateToken(cus);
   const refreshToken = generateToken(cus, "Refresh", "1d");
