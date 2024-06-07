@@ -45,7 +45,7 @@ model Customer {
   profile      Profile?
   refreshToken String        @default("")
   createdAt    DateTime      @default(now())
-  updatedAt    DateTime      @updatedAt
+  updatedAt    DateTime?     @updatedAt()
 }
 
 // unconfirm table
@@ -98,7 +98,7 @@ model Product {
   shoppingCart      ShoppingCart[]
   addedDates        DateTime
   createdAt         DateTime       @default(now())
-  updatedAt         DateTime       @updatedAt()
+  updatedAt         DateTime?      @updatedAt
 }
 
 model Category {
@@ -116,15 +116,15 @@ model ShoppingCart {
 }
 
 model Admin {
-  id           Int      @id @default(autoincrement())
-  name         String   @db.VarChar(20)
-  email        String   @unique @db.VarChar(25)
-  password     String   @db.VarChar(100)
-  role         Role     @default(ADMIN)
-  phoneNumber  String   @unique @db.VarChar(15)
-  refreshToken String   @default("") @db.VarChar(200)
-  createdAt    DateTime @default(now())
-  updatedAt    DateTime @updatedAt
+  id           Int       @id @default(autoincrement())
+  name         String    @db.VarChar(20)
+  email        String    @unique @db.VarChar(25)
+  password     String    @db.VarChar(100)
+  role         Role      @default(ADMIN)
+  phoneNumber  String    @unique @db.VarChar(15)
+  refreshToken String    @default("") @db.VarChar(200)
+  createdAt    DateTime  @default(now())
+  updatedAt    DateTime? @updatedAt
 }
 
 model OrderItem {
