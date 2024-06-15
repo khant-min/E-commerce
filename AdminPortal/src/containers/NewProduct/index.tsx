@@ -1,188 +1,405 @@
-import React, { ReactNode, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Box,
   Button,
-  Container,
+  Step,
+  StepLabel,
+  Stepper,
   TextField,
-  Typography,
-  Select,
   MenuItem,
-  FormControl,
-  InputLabel,
-  FormHelperText,
-  SelectChangeEvent,
+  Input,
 } from "@mui/material";
 import { ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
 import { storage } from "../../firebase";
 import ProductService from "../../services/ProductService";
+import CategoryService from "../../services/CategoryService";
+import SupplierService from "../../services/SupplierService";
 
-type Product = {
+const steps = [
+  "Basic Info",
+  "Pricing & Stock",
+  "Product Details",
+  "Supplier & Warehouse",
+];
+
+interface Category {
+  id: number;
   name: string;
-  description: string;
-  image: string;
-  price: number;
-  brand: string;
-  category: string;
-};
+  phone: string;
+  email: string;
+}
 
-const CreateProduct: React.FC = () => {
-  const [product, setProduct] = useState<Product>({
+interface Supplier {}
+
+const ProductForm: React.FC = () => {
+  const [activeStep, setActiveStep] = useState(0);
+  const [categories, setCategories] = useState<Category[]>();
+  const [supplier, setSupplier] = useState<Category[]>();
+  const [formData, setFormData] = useState({
+    sku: "",
     name: "",
     description: "",
-    image: "",
-    price: 0,
     brand: "",
-    category: "",
+    categoryId: 0,
+    costPrice: "",
+    sellPrice: "",
+    images: [] as File[],
+    quantityInStock: "",
+    weight: "",
+    size: "",
+    color: "",
+    material: "",
+    expirationDate: "",
+    warehouseLocation: "",
+    stockStatus: "",
+    width: "",
+    height: "",
+    length: "",
+    supplierId: 0,
   });
-  const [file, setFile] = useState<Blob>();
-  const [imageUrl, setImageUrl] = useState("");
 
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ) => {
     const { name, value } = e.target;
-    setProduct({ ...product, [name]: value });
+    setFormData((prev) => ({
+      ...prev,
+      [name]: value,
+    }));
   };
 
-  const handleSelectChange = (e: SelectChangeEvent<string>) => {
-    const name = e.target.name as keyof typeof product;
-    setProduct({ ...product, [name]: e.target.value as string });
+  const handleNext = () => {
+    setActiveStep((prevActiveStep) => prevActiveStep + 1);
   };
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    console.log({ ...product, image: imageUrl });
-    const res = await ProductService.createProduct({
-      ...product,
-      image: imageUrl,
-    });
+  const handleBack = () => {
+    setActiveStep((prevActiveStep) => prevActiveStep - 1);
+  };
+
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (e.target.files?.length! > 4) {
+      return alert("Only maximum 4 files accepted.");
+    }
+
+    if (e.target.files) {
+      setFormData((prev) => ({
+        ...prev,
+        images: Array.from(e.target.files!),
+      }));
+    }
+  };
+
+  const handleSubmit = async () => {
+    console.log(formData);
+    const res = await ProductService.createProduct(formData);
+    console.log(res);
+  };
+
+  const fetchCategories = async () => {
+    const res = await CategoryService.getList();
+    setCategories(res.data);
+  };
+
+  const fetchSupplier = async () => {
+    const res = await SupplierService.getList();
+    setSupplier(res.data);
   };
 
   useEffect(() => {
-    const uploadImage = () => {
-      const name = new Date().getTime() + file!.name;
-      console.log(name);
-      const storageRef = ref(storage, file!.name);
-      const uploadTask = uploadBytesResumable(storageRef, file!);
+    fetchCategories();
+    fetchSupplier();
+  }, []);
 
-      uploadTask.on(
-        "state_changed",
-        (snapshot) => {
-          const progress =
-            (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
-          console.log("Upload is " + progress + "% done");
-          switch (snapshot.state) {
-            case "paused":
-              console.log("Upload is paused");
-              break;
-            case "running":
-              console.log("Uploading");
-              break;
-            default:
-              break;
-          }
-        },
-        (err) => {
-          console.log(err);
-        },
-        () => {
-          getDownloadURL(uploadTask.snapshot.ref).then(
-            (downloadUrl: string) => {
-              console.log("File available at", downloadUrl);
-              setImageUrl(downloadUrl);
-              // got image url
-            }
-          );
+  useEffect(() => {
+    if (formData.images && formData.images.length > 0) {
+      const uploadImages = async () => {
+        const uploadPromises = formData.images.map((file) => {
+          return new Promise((resolve, reject) => {
+            const name = new Date().getTime() + file.name;
+            const storageRef = ref(storage, name);
+            const uploadTask = uploadBytesResumable(storageRef, file);
+
+            uploadTask.on(
+              "state_changed",
+              (snapshot) => {
+                const progress =
+                  (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+                console.log(`Upload is ${progress}% done`);
+                switch (snapshot.state) {
+                  case "paused":
+                    console.log("Upload is paused");
+                    break;
+                  case "running":
+                    console.log("Uploading");
+                    break;
+                  default:
+                    break;
+                }
+              },
+              (error) => {
+                console.log(error);
+                reject(error);
+              },
+              () => {
+                getDownloadURL(uploadTask.snapshot.ref)
+                  .then((downloadUrl) => {
+                    console.log("File available at", downloadUrl);
+                    resolve(downloadUrl);
+                  })
+                  .catch(reject);
+              }
+            );
+          });
+        });
+
+        try {
+          const urls: any = await Promise.all(uploadPromises);
+          setFormData({ ...formData, images: urls });
+        } catch (error) {
+          console.error("Error uploading one or more files:", error);
         }
-      );
-    };
-    file && uploadImage();
-  }, [file]);
+      };
+
+      uploadImages();
+    }
+  }, [formData.images, storage]);
 
   return (
-    <Container
-      maxWidth="md"
-      sx={{
-        minHeight: "120vh",
-        display: "grid",
-      }}
-    >
-      <Box sx={{ mt: 4, placeSelf: "center" }}>
-        <Typography variant="h4" component="h1" gutterBottom>
-          Create New Product
-        </Typography>
-        <Box component="form" onSubmit={handleSubmit}>
+    <Box sx={{ width: "100%" }}>
+      <Stepper activeStep={activeStep} sx={{ mb: 4 }}>
+        {steps.map((label, i) => (
+          <Step key={i}>
+            <StepLabel>{label}</StepLabel>
+          </Step>
+        ))}
+      </Stepper>
+
+      {activeStep === 0 && (
+        <Box>
           <TextField
+            required
+            fullWidth
+            label="SKU"
+            name="sku"
+            value={formData.sku}
+            onChange={handleChange}
+            margin="normal"
+          />
+          <TextField
+            required
+            fullWidth
             label="Name"
             name="name"
-            value={product.name}
+            value={formData.name}
             onChange={handleChange}
-            fullWidth
             margin="normal"
-            required
           />
           <TextField
+            required
+            fullWidth
             label="Description"
             name="description"
-            value={product.description}
+            value={formData.description}
             onChange={handleChange}
-            fullWidth
             margin="normal"
-            required
-            multiline
-            rows={4}
           />
           <TextField
-            label="Price"
-            name="price"
-            type="number"
-            value={product.price}
-            onChange={handleChange}
-            fullWidth
-            margin="normal"
             required
-          />
-          <TextField
+            fullWidth
             label="Brand"
             name="brand"
-            value={product.brand}
+            value={formData.brand}
             onChange={handleChange}
-            fullWidth
             margin="normal"
-            required
           />
-          <FormControl fullWidth margin="normal" required>
-            <InputLabel>Category</InputLabel>
-            <Select
-              name="category"
-              value={product.category}
-              onChange={handleSelectChange}
-              label="Category"
-            >
-              <MenuItem value="electronics">Electronics</MenuItem>
-              <MenuItem value="fashion">Fashion</MenuItem>
-              <MenuItem value="home">Home</MenuItem>
-              <MenuItem value="beauty">Beauty</MenuItem>
-              <MenuItem value="sports">Sports</MenuItem>
-            </Select>
-            <FormHelperText>Select a category</FormHelperText>
-          </FormControl>
 
-          <input
+          <TextField
+            select
+            fullWidth
+            label="Category"
+            name="categoryId"
+            value={formData.categoryId}
+            onChange={handleChange}
+            margin="normal"
+          >
+            {categories?.map((category) => (
+              <MenuItem value={category.id}>{category.name}</MenuItem>
+            ))}
+          </TextField>
+        </Box>
+      )}
+
+      {activeStep === 1 && (
+        <Box>
+          <TextField
+            fullWidth
+            label="Cost Price"
+            name="costPrice"
+            type="number"
+            value={formData.costPrice}
+            onChange={handleChange}
+            margin="normal"
+          />
+          <TextField
+            fullWidth
+            label="Selling Price"
+            name="sellPrice"
+            type="number"
+            value={formData.sellPrice}
+            onChange={handleChange}
+            margin="normal"
+          />
+          <TextField
+            fullWidth
+            label="Quantity In Stock"
+            name="quantityInStock"
+            type="number"
+            value={formData.quantityInStock}
+            onChange={handleChange}
+            margin="normal"
+          />
+          <TextField
+            select
+            fullWidth
+            label="Stock Status"
+            name="stockStatus"
+            value={formData.stockStatus}
+            onChange={handleChange}
+            margin="normal"
+          >
+            <MenuItem value="INSTOCK">In Stock</MenuItem>
+            <MenuItem value="OUTOFSTOCK">Out of Stock</MenuItem>
+          </TextField>
+          <Input
+            fullWidth
             required
             type="file"
-            onChange={(e: any) => setFile(e.target.files[0])}
+            inputProps={{ multiple: true }}
+            onChange={handleFileChange}
           />
-
-          <Box sx={{ mt: 2 }}>
-            <Button type="submit" variant="contained" color="primary" fullWidth>
-              Create Product
-            </Button>
-          </Box>
         </Box>
+      )}
+
+      {activeStep === 2 && (
+        <Box>
+          <TextField
+            fullWidth
+            label="Weight"
+            name="weight"
+            type="number"
+            value={formData.weight}
+            onChange={handleChange}
+            margin="normal"
+          />
+          <TextField
+            fullWidth
+            label="Size"
+            name="size"
+            value={formData.size}
+            onChange={handleChange}
+            margin="normal"
+          />
+          <TextField
+            fullWidth
+            label="Color"
+            name="color"
+            value={formData.color}
+            onChange={handleChange}
+            margin="normal"
+          />
+          <TextField
+            fullWidth
+            label="Material"
+            name="material"
+            value={formData.material}
+            onChange={handleChange}
+            margin="normal"
+          />
+          <TextField
+            fullWidth
+            label="Expire Date"
+            name="expirationDate"
+            type="date"
+            value={formData.expirationDate}
+            onChange={handleChange}
+            margin="normal"
+            InputLabelProps={{
+              shrink: true,
+            }}
+          />
+        </Box>
+      )}
+
+      {activeStep === 3 && (
+        <Box>
+          <TextField
+            fullWidth
+            label="Warehouse Location"
+            name="warehouseLocation"
+            value={formData.warehouseLocation}
+            onChange={handleChange}
+            margin="normal"
+          />
+          <TextField
+            fullWidth
+            label="Width"
+            name="width"
+            type="number"
+            value={formData.width}
+            onChange={handleChange}
+            margin="normal"
+          />
+          <TextField
+            fullWidth
+            label="Height"
+            name="height"
+            type="number"
+            value={formData.height}
+            onChange={handleChange}
+            margin="normal"
+          />
+          <TextField
+            fullWidth
+            label="Length"
+            name="length"
+            type="number"
+            value={formData.length}
+            onChange={handleChange}
+            margin="normal"
+          />
+          <TextField
+            select
+            fullWidth
+            label="Supplier"
+            name="supplierId"
+            value={formData.supplierId}
+            onChange={handleChange}
+            margin="normal"
+          >
+            {supplier?.map((sup) => (
+              <MenuItem value={sup.id}>{sup.name}</MenuItem>
+            ))}
+            <MenuItem value="OUTOFSTOCK">Out of Stock</MenuItem>
+          </TextField>
+        </Box>
+      )}
+
+      <Box sx={{ display: "flex", justifyContent: "space-between", mt: 4 }}>
+        <Button disabled={activeStep === 0} onClick={handleBack}>
+          Back
+        </Button>
+        {activeStep === steps.length - 1 ? (
+          <Button onClick={handleSubmit} variant="contained" color="primary">
+            Submit
+          </Button>
+        ) : (
+          <Button onClick={handleNext} variant="contained" color="primary">
+            Next
+          </Button>
+        )}
       </Box>
-    </Container>
+    </Box>
   );
 };
 
-export default CreateProduct;
+export default ProductForm;
