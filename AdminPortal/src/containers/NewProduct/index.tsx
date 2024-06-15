@@ -379,7 +379,6 @@ const ProductForm: React.FC = () => {
             {supplier?.map((sup) => (
               <MenuItem value={sup.id}>{sup.name}</MenuItem>
             ))}
-            <MenuItem value="OUTOFSTOCK">Out of Stock</MenuItem>
           </TextField>
         </Box>
       )}
