@@ -97,6 +97,7 @@ model Product {
   supplier          Supplier       @relation(fields: [supplierId], references: [id])
   shoppingCart      ShoppingCart[]
   addedDates        DateTime
+  orderItems        OrderItem[]
   createdAt         DateTime       @default(now())
   updatedAt         DateTime?      @updatedAt
 }
@@ -129,11 +130,13 @@ model Admin {
 }
 
 model OrderItem {
-  id         Int   @id @default(autoincrement())
+  id         Int     @id @default(autoincrement())
   quantity   Int
   unitPrice  Float
   totalPrice Float
-  order      Order @relation(fields: [orderId], references: [id])
+  productId  Int
+  product    Product @relation(fields: [productId], references: [id])
+  order      Order   @relation(fields: [orderId], references: [id])
   orderId    Int
 }
 

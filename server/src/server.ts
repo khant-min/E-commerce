@@ -8,6 +8,7 @@ import serviceRoute from "./routes/serviceRoute";
 import categoryRoute from "./routes/categoryRoute";
 import supplierRoute from "./routes/supplierRoute";
 import analyzeRoute from "./routes/analyzeRoute";
+import orderRoute from "./routes/orderRoute";
 import notFound from "./routes/notFound";
 import errorHandler from "./middleware/errorHandler";
 import { verifyToken } from "./middleware/authHandler";
@@ -38,6 +39,7 @@ router.use("/customers", customerRoute);
 router.use("/categories", categoryRoute);
 router.use("/suppliers", supplierRoute);
 router.use("/analyze", analyzeRoute);
+router.use("/orders", orderRoute);
 
 app.use("/api", router);
 app.use("*", notFound);

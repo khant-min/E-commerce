@@ -29,16 +29,15 @@ export const createAnOrder = asyncHandler(async (req, res, next) => {
     return next(new ErrorResponse("Order items are required", 400));
   }
 
-  // Calculate subtotal
-  const subtotal = orderItems.reduce(
-    (acc: any, item: any) => acc + item.unitPrice * item.quantity,
-    0
-  );
+  // const subtotal = orderItems.reduce(
+  //   (acc: any, item: any) => acc + item.unitPrice * item.quantity,
+  //   0
+  // );
 
-  // Calculate total amount
-  const totalAmount = subtotal - discounts + taxes + shippingCost;
+  const subtotal = 1000;
 
-  // Create order with associated order items
+  const totalAmount = subtotal + taxes + shippingCost - discounts;
+
   const order = await prisma.order.create({
     data: {
       orderStatus: "PROCESSING",
@@ -53,6 +52,7 @@ export const createAnOrder = asyncHandler(async (req, res, next) => {
       orderNotes,
       orderItems: {
         create: orderItems.map((item: any) => ({
+          productId: item.productId,
           quantity: item.quantity,
           unitPrice: item.unitPrice,
           totalPrice: item.unitPrice * item.quantity,
