@@ -102,9 +102,10 @@ model Product {
 }
 
 model Category {
-  id      Int       @id @default(autoincrement())
-  name    String    @db.VarChar(20)
-  product Product[]
+  id          Int       @id @default(autoincrement())
+  name        String    @db.VarChar(20)
+  description String    @db.VarChar(100)
+  product     Product[]
 }
 
 model ShoppingCart {

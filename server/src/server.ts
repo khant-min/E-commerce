@@ -5,6 +5,8 @@ import root from "./routes/root";
 import productRoute from "./routes/productRoute";
 import customerRoute from "./routes/customerRoute";
 import serviceRoute from "./routes/serviceRoute";
+import categoryRoute from "./routes/categoryRoute";
+import supplierRoute from "./routes/supplierRoute";
 import analyzeRoute from "./routes/analyzeRoute";
 import notFound from "./routes/notFound";
 import errorHandler from "./middleware/errorHandler";
@@ -33,6 +35,8 @@ router.use("/services", serviceRoute);
 // router.use(verifyToken);
 router.use("/products", productRoute);
 router.use("/customers", customerRoute);
+router.use("/categories", categoryRoute);
+router.use("/suppliers", supplierRoute);
 router.use("/analyze", analyzeRoute);
 
 app.use("/api", router);

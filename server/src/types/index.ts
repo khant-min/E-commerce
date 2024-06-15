@@ -18,7 +18,7 @@ export interface ProductProps {
   description: string;
   costPrice: string;
   sellPrice: string;
-  image: string;
+  images: string[];
   quantityInStock: number;
   weight: string;
   size: string;

@@ -9,7 +9,7 @@ export const productSchema = Joi.object({
   description: Joi.string().trim().required(),
   costPrice: Joi.string().trim().required(),
   sellPrice: Joi.string().trim().required(),
-  image: Joi.string().uri().required(),
+  images: Joi.array().required(),
   quantityInStock: Joi.number().integer().required(),
   weight: Joi.string().trim().required(),
   size: Joi.string().trim().required(),
@@ -24,7 +24,7 @@ export const productSchema = Joi.object({
   height: Joi.string().trim().required(),
   length: Joi.string().trim().required(),
   supplierId: Joi.number().integer().required(),
-  addedDates: Joi.date().required(),
+  // addedDates: Joi.date().required(),
 });
 
 export const updateProductSchema = productSchema.keys({

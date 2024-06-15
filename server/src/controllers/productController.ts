@@ -35,7 +35,7 @@ export const createProduct = asyncHandler(async (req, res, next) => {
     description,
     costPrice,
     sellPrice,
-    image,
+    images,
     quantityInStock,
     weight,
     size,
@@ -50,6 +50,11 @@ export const createProduct = asyncHandler(async (req, res, next) => {
     supplierId,
     addedDates,
   }: ProductProps = value;
+
+  const today = new Date();
+  const fmtDate =
+    today.getDate() + "-" + (today.getMonth() + 1) + "-" + today.getFullYear();
+  console.log("date: ", fmtDate);
 
   const createdProduct = await prisma.product.create({
     data: {
@@ -72,11 +77,17 @@ export const createProduct = asyncHandler(async (req, res, next) => {
       height,
       length,
       supplierId,
-      addedDates,
+      addedDates: today,
     },
   });
 
-  await prisma.images.create({ data: { image, productId: createdProduct.id } });
+  images.map((image) => {
+    (async () => {
+      await prisma.images.create({
+        data: { image, productId: createdProduct.id },
+      });
+    })();
+  });
 
   res.status(201).json({ message: "New product created successfully" });
 });
@@ -101,7 +112,7 @@ export const updateProduct = asyncHandler(async (req, res, next) => {
     description,
     costPrice,
     sellPrice,
-    image,
+    images,
     quantityInStock,
     weight,
     size,
@@ -149,10 +160,10 @@ export const updateProduct = asyncHandler(async (req, res, next) => {
 
   if (!updatedProduct) return next(new ErrorResponse("Update failed!", 500));
 
-  await prisma.images.updateMany({
-    where: { productId: updatedProduct.id },
-    data: { image },
-  });
+  // await prisma.images.updateMany({
+  //   where: { productId: updatedProduct.id },
+  //   data: { image },
+  // });
 
   res.status(200).json({ message: "Product updated successfully" });
 });
