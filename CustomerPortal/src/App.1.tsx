@@ -11,7 +11,7 @@ import OrderHistory from "./containers/OrderHistory/OrderHistory";
 
 export default function App() {
   return (
-    <div className="">
+    <div>
       <Routes>
         <Route path="/register" element={<Register />} />
         <Route path="/login" element={<Login />} />

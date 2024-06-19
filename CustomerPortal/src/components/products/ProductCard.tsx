@@ -1,27 +1,32 @@
 import { Box, Card, CardBody, Text } from "@chakra-ui/react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 
 interface Props {
   image: string;
   name: string;
   description: string;
-  price: number;
+  price: string;
 }
 
-const ProductCard = ({ image, name, description, price }: Props) => {
+const ProductCard = (product: any) => {
+  console.log("in card", product);
+  const navigate = useNavigate();
+
   return (
-    <Card className="w-96 h-80 flex flex-col items-start justify-center flex-shrink-0">
-      <Box className="bg-gray-100 m-5 w-[90%] h-[50%]">{image}</Box>
+    <Card
+      onClick={() => navigate(`/products/${1}`)}
+      className="w-60 h-60 flex flex-col items-start justify-center flex-shrink-0 p-2 hover:scale-105 transition-all"
+    >
+      <Box className="bg-gray-100 m-5 w-[90%] h-[50%]">
+        <img src="/images/bg.jpg" alt="" />
+      </Box>
       <CardBody className="w-full">
         <Text as={"b"} fontSize={"lg"}>
-          {name}
+          {product.name}
         </Text>
-        <Text>{description}</Text>
+        <Text>{product.description}</Text>
         <Box className="flex justify-between items-center mt-4">
-          <Text color={"purple"}>${price}</Text>
-          <Link to={"#"} className="text-purple-900">
-            View
-          </Link>
+          <Text color={"purple"}>${product.price}</Text>
         </Box>
       </CardBody>
     </Card>
