@@ -1,10 +1,11 @@
-import { Box, Button, Card, CardBody, Text } from "@chakra-ui/react";
+import { Badge, Box, Image } from "@chakra-ui/react";
 import ProductService from "../../services/ProductService";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import Loading from "./Loading";
 
 interface Products {
-  [key: string]: string;
+  [key: string]: any;
 }
 
 export default function Products() {
@@ -27,26 +28,49 @@ export default function Products() {
       <Box className="grid gap-4 grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 w-full">
         {products.length ? (
           products.map((product) => (
-            <Card
+            <Box
               onClick={() => navigate(`/products/${1}`, { state: product })}
-              className="w-60 h-60 flex flex-col items-start justify-center flex-shrink-0 p-2 hover:scale-105 transition-all"
+              maxW="sm"
+              borderWidth="1px"
+              borderRadius="lg"
+              overflow="hidden"
+              className="flex flex-col items-start justify-center flex-shrink-0 p-2 hover:scale-105 transition-all"
             >
-              <Box className="bg-gray-100 m-5 w-[90%] h-[50%]">
-                <img src="/images/bg.jpg" alt="" />
-              </Box>
-              <CardBody className="w-full">
-                <Text as={"b"} fontSize={"lg"}>
-                  {product.name}
-                </Text>
-                <Text>{product.description}</Text>
-                <Box className="flex justify-between items-center mt-4">
-                  <Text color={"purple"}>${product.sellPrice}</Text>
+              <Image src={product.images[0].image} />
+
+              <Box p="6">
+                <Box display="flex" alignItems="baseline">
+                  <Badge borderRadius="full" px="2" colorScheme="teal">
+                    New
+                  </Badge>
+                  <Box
+                    color="gray.500"
+                    fontWeight="semibold"
+                    letterSpacing="wide"
+                    fontSize="xs"
+                    textTransform="uppercase"
+                    ml="2"
+                  >
+                    {product.name}
+                  </Box>
                 </Box>
-              </CardBody>
-            </Card>
+
+                <Box
+                  mt="1"
+                  fontWeight="semibold"
+                  as="h4"
+                  lineHeight="tight"
+                  isTruncated
+                >
+                  {product.description}
+                </Box>
+
+                <Box>{product.sellPrice} $</Box>
+              </Box>
+            </Box>
           ))
         ) : (
-          <div>No products...</div>
+          <Loading />
         )}
       </Box>
     </Box>

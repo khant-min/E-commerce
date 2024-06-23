@@ -1,13 +1,54 @@
-import { Link as RouterLink } from "react-router-dom";
+import { Link as RouterLink, useNavigate } from "react-router-dom";
 import { FaShoppingCart } from "react-icons/fa";
 import { RiLogoutBoxRLine } from "react-icons/ri";
 import { FaUser } from "react-icons/fa";
-import { Box, Button, Link } from "@chakra-ui/react";
+import {
+  Badge,
+  Box,
+  Button,
+  IconButton,
+  Link,
+  useToast,
+} from "@chakra-ui/react";
 import { Input } from "@chakra-ui/react";
+import { CartContextProps, useCart } from "../../containers/CartProvider";
+import UserService from "../../services/UserService";
 
 const categorieslist = ["Electrinies", "Fruits", "Vegetables"];
 
 export default function Header() {
+  const navigate = useNavigate();
+  const toast = useToast();
+  const { itemCountInCart } = useCart() as CartContextProps;
+
+  const logout = async () => {
+    const user = JSON.parse(localStorage.getItem("user")!);
+    const res = await UserService.logout({ userId: user.userId });
+    // console.log(res);
+
+    if (res.success) {
+      toast({
+        title: "Logout successed.",
+        // description: "Please login to enter site",
+        status: "success",
+        duration: 5000,
+        isClosable: true,
+        position: "top-right",
+      });
+      localStorage.removeItem("user");
+      navigate("/");
+    } else {
+      toast({
+        title: "Logout failed.",
+        description: res.data.response.data,
+        status: "error",
+        duration: 5000,
+        isClosable: true,
+        position: "top-right",
+      });
+    }
+  };
+
   return (
     <div className="flex justify-between  items-center p-4 shadow-lg">
       <h1>E-commerce</h1>
@@ -64,21 +105,57 @@ export default function Header() {
           </li>
         </ul>
       </Box>
-      <div className="flex justify-between items-center gap-10">
-        <button>
-          <RouterLink to="/profile">
-            <FaUser className="w-5 h-5" />
-          </RouterLink>
-        </button>
-        <button>
-          <RouterLink to="/checkout">
-            <FaShoppingCart className="w-5 h-5" />
-          </RouterLink>
-        </button>
-        <button>
-          <RiLogoutBoxRLine className="w-5 h-5" />
-        </button>
-      </div>
+
+      {localStorage.getItem("user") === null ? (
+        <Box className="flex gap-2">
+          <Button onClick={() => navigate("/register")}>Register</Button>
+          <Button onClick={() => navigate("/login")}>Login</Button>
+        </Box>
+      ) : (
+        <div className="flex justify-between items-center gap-10">
+          <button>
+            <RouterLink to="/profile">
+              <IconButton
+                icon={<FaUser />}
+                aria-label="Profile"
+                variant="outline"
+              />
+            </RouterLink>
+          </button>
+          <button>
+            <RouterLink to="/checkout">
+              <Box position="relative" display="inline-block">
+                <IconButton
+                  icon={<FaShoppingCart />}
+                  aria-label="Shopping Cart"
+                  variant="outline"
+                />
+                {itemCountInCart > 0 && (
+                  <Badge
+                    position="absolute"
+                    top="-1"
+                    right="-1"
+                    borderRadius="full"
+                    px="2"
+                    colorScheme="red"
+                  >
+                    {itemCountInCart}
+                  </Badge>
+                )}
+              </Box>
+            </RouterLink>
+          </button>
+          <button>
+            <IconButton
+              onClick={logout}
+              fontSize={20}
+              icon={<RiLogoutBoxRLine />}
+              aria-label="Logout"
+              variant="outline"
+            />
+          </button>
+        </div>
+      )}
     </div>
   );
 }

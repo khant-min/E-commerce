@@ -5,9 +5,10 @@ export const systemInfo = asyncHandler(async (req, res, next) => {
   // visitors
 
   const customers = await prisma.customer.count();
-
   const products = await prisma.product.count();
-  res.status(200).json({ customers, products });
+  const categories = await prisma.category.count();
+
+  res.status(200).json({ customers, products, categories });
 });
 
 export const addVisitor = asyncHandler(async (req, res, next) => {});

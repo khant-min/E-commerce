@@ -64,11 +64,11 @@ export const loginCustomer = asyncHandler(async (req, res, next) => {
   if (!matchPassword)
     return next(new ErrorResponse("Credentials are invalid", 401));
 
-  console.log(process.env.ACCESS_TOKEN_SECRET);
-
   const cus: AuthorizedUser = { email, role: foundCustomer.role };
   const accessToken = generateToken(cus);
   const refreshToken = generateToken(cus, "Refresh", "1d");
+
+  console.log("my token: ", refreshToken);
 
   await prisma.customer.update({
     where: { id: foundCustomer.id },
@@ -82,7 +82,13 @@ export const loginCustomer = asyncHandler(async (req, res, next) => {
     // maxAge: 24 * 60 * 60 * 1000,
   });
 
-  res.status(200).json({ accessToken });
+  res.status(200).json({
+    userId: foundCustomer.id,
+    name: foundCustomer.name,
+    email: foundCustomer.email,
+    phone: foundCustomer.phoneNumber,
+    accessToken,
+  });
 });
 
 /**
@@ -92,11 +98,13 @@ export const loginCustomer = asyncHandler(async (req, res, next) => {
  * @access public (Customer)
  */
 export const logoutCustomer = asyncHandler(async (req, res, next) => {
-  const { email } = req.body;
-  if (!email)
+  const { userId } = req.body;
+  if (!userId)
     return next(new ErrorResponse("Please filled required fields", 400));
 
-  const foundCustomer = await prisma.customer.findUnique({ where: { email } });
+  const foundCustomer = await prisma.customer.findUnique({
+    where: { id: userId },
+  });
 
   if (!foundCustomer)
     return next(new ErrorResponse("Credentials are invalid", 401));

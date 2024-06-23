@@ -6,10 +6,56 @@ import {
   FormLabel,
   Heading,
   Input,
+  useToast,
 } from "@chakra-ui/react";
-import { Link } from "react-router-dom";
+import { useForm } from "react-hook-form";
+import { Link, useNavigate } from "react-router-dom";
+import UserService from "../../services/UserService";
+import { useEffect } from "react";
 
 export default function Login() {
+  const navigate = useNavigate();
+  const toast = useToast();
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm();
+
+  const onSubmit = async (data: any) => {
+    const res = await UserService.login({ ...data, role: "CUSTOMER" });
+    console.log("res: ", res);
+
+    if (res.success) {
+      toast({
+        title: "Login successed.",
+        // description: "Please login to enter site",
+        status: "success",
+        duration: 5000,
+        isClosable: true,
+        position: "top-right",
+      });
+
+      localStorage.setItem("user", JSON.stringify(res.data));
+      navigate("/");
+    } else {
+      toast({
+        title: "Login failed.",
+        description: res.data.response.data,
+        status: "error",
+        duration: 5000,
+        isClosable: true,
+        position: "top-right",
+      });
+    }
+  };
+
+  useEffect(() => {
+    if (localStorage.getItem("user") !== null) {
+      navigate("/");
+    }
+  }, []);
+
   return (
     <Card
       style={{
@@ -26,6 +72,7 @@ export default function Login() {
       <div style={{ width: "50%", padding: "80px" }}>
         <Heading style={{ textAlign: "start" }}>Welcome Back!</Heading>
         <form
+          onSubmit={handleSubmit(onSubmit)}
           style={{
             display: "flex",
             flexDirection: "column",
@@ -33,14 +80,22 @@ export default function Login() {
             // width: "80%",
           }}
         >
-          <FormControl>
+          <FormControl id="email" isInvalid={!!errors.email}>
             <FormLabel>Email</FormLabel>
-            <Input type="email" placeholder="Enter your email" />
+            <Input
+              type="email"
+              {...register("email", { required: "Email is required" })}
+              placeholder="Enter your email"
+            />
           </FormControl>
 
-          <FormControl>
+          <FormControl id="password" isInvalid={!!errors.password}>
             <FormLabel>Password</FormLabel>
-            <Input type="email" placeholder="Enter your password" />
+            <Input
+              type="password"
+              {...register("password", { required: "Password is required" })}
+              placeholder="Enter your password"
+            />
           </FormControl>
 
           <div
@@ -56,7 +111,9 @@ export default function Login() {
             </Link>
           </div>
 
-          <Button colorScheme="blue">Login</Button>
+          <Button type="submit" colorScheme="blue">
+            Login
+          </Button>
 
           <div
             style={{

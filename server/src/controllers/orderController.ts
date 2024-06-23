@@ -15,7 +15,7 @@ export const getAllOrders = asyncHandler(async (req, res, next) => {
 
 export const createAnOrder = asyncHandler(async (req, res, next) => {
   const {
-    customerId,
+    userId: customerId,
     orderItems,
     discounts = 0,
     taxes = 0,

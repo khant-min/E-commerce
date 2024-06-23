@@ -3,6 +3,7 @@ import AnalyzeService from "../../services/AnalyzeService";
 
 interface AnalyzeData {
   customers: number;
+  categories: number;
   products: number;
   visitors: number;
 }
@@ -39,7 +40,7 @@ export default function HomePage() {
         <p className="text-green-500 text-lg font-semibold text-end">10% Up</p>
       </div>
       <div className="shadow-lg p-6">
-        <h2 className="text-4xl font-sans">12 Categories</h2>
+        <h2 className="text-4xl font-sans">{analyzedData?.categories}</h2>
         <p className="text-green-500 text-lg font-semibold text-end">10% Up</p>
       </div>
     </div>

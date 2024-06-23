@@ -11,7 +11,7 @@ import { productSchema, updateProductSchema } from "../utils/productSchema";
  * @retunr all products
  */
 export const getAllProducts = asyncHandler(async (req, res, next) => {
-  const products = await prisma.product.findMany();
+  const products = await prisma.product.findMany({ include: { images: true } });
   res.status(200).json(products);
 });
 

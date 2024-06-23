@@ -8,6 +8,7 @@ import AppContainer from "./hoc/AppContainer";
 import Checkout from "./containers/checkout/Checkout";
 import Profile from "./containers/profile/Profile";
 import OrderHistory from "./containers/OrderHistory/OrderHistory";
+import Order from "./containers/checkout/Order";
 
 export default function App() {
   return (
@@ -20,6 +21,7 @@ export default function App() {
           <Route index element={<Home />} />
           <Route path="/products" element={<Products />} />
           <Route path="/checkout" element={<Checkout />} />
+          <Route path="/order" element={<Order />} />
           <Route path="/products/:id" element={<ProductDetail />} />
           <Route path="/profile" element={<Profile />} />
           <Route path="/order-history" element={<OrderHistory />} />
