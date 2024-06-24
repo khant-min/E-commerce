@@ -34,7 +34,7 @@ enum PaymentMethod {
 }
 
 model Customer {
-  id           Int           @id @default(autoincrement())
+  id           String        @id @default(uuid())
   name         String        @db.VarChar(20)
   email        String        @unique @db.VarChar(25)
   password     String        @db.VarChar(100)
@@ -50,21 +50,21 @@ model Customer {
 
 // unconfirm table
 model Profile {
-  id         Int      @id @default(autoincrement())
+  id         String   @id @default(uuid())
   bio        String   @db.VarChar(100)
   customer   Customer @relation(fields: [customerId], references: [id])
-  customerId Int      @unique
+  customerId String   @unique
 }
 
 model Images {
-  id        Int     @id @default(autoincrement())
+  id        String  @id @default(uuid())
   image     String
-  productId Int
+  productId String
   product   Product @relation(fields: [productId], references: [id])
 }
 
 model Supplier {
-  id       Int       @id @default(autoincrement())
+  id       String    @id @default(uuid())
   name     String    @db.VarChar(25)
   phone    String    @db.VarChar(20)
   email    String    @unique @db.VarChar(25)
@@ -72,15 +72,15 @@ model Supplier {
 }
 
 model Product {
-  id                Int            @id @default(autoincrement())
+  id                String         @id @default(uuid())
   sku               String         @db.VarChar(25)
   name              String         @db.VarChar(25)
   description       String
   brand             String         @db.VarChar(25)
-  categoryId        Int
+  categoryId        String
   category          Category       @relation(fields: [categoryId], references: [id])
-  costPrice         String         @db.VarChar(20)
-  sellPrice         String         @db.VarChar(20)
+  costPrice         Float
+  sellPrice         Float
   images            Images[]
   quantityInStock   Int
   weight            String         @db.VarChar(10)
@@ -93,7 +93,7 @@ model Product {
   width             String         @db.VarChar(10)
   height            String         @db.VarChar(10)
   length            String         @db.VarChar(10)
-  supplierId        Int
+  supplierId        String
   supplier          Supplier       @relation(fields: [supplierId], references: [id])
   shoppingCart      ShoppingCart[]
   addedDates        DateTime
@@ -103,22 +103,22 @@ model Product {
 }
 
 model Category {
-  id          Int       @id @default(autoincrement())
+  id          String    @id @default(uuid())
   name        String    @db.VarChar(20)
   description String    @db.VarChar(100)
   product     Product[]
 }
 
 model ShoppingCart {
-  id         Int      @id @default(autoincrement())
+  id         String   @id @default(uuid())
   product    Product  @relation(fields: [productId], references: [id])
-  productId  Int
+  productId  String
   customer   Customer @relation(fields: [customerId], references: [id])
-  customerId Int      @unique
+  customerId String   @unique
 }
 
 model Admin {
-  id           Int       @id @default(autoincrement())
+  id           String    @id @default(uuid())
   name         String    @db.VarChar(20)
   email        String    @unique @db.VarChar(25)
   password     String    @db.VarChar(100)
@@ -130,21 +130,21 @@ model Admin {
 }
 
 model OrderItem {
-  id         Int     @id @default(autoincrement())
+  id         String  @id @default(uuid())
   quantity   Int
   unitPrice  Float
   totalPrice Float
-  productId  Int
+  productId  String
   product    Product @relation(fields: [productId], references: [id])
+  orderId    String
   order      Order   @relation(fields: [orderId], references: [id])
-  orderId    Int
 }
 
 model Order {
-  id              Int           @id @default(autoincrement())
+  id              String        @id @default(uuid())
   orderDate       DateTime      @default(now())
   orderStatus     OrderStatus
-  customerId      Int
+  customerId      String
   customer        Customer      @relation(fields: [customerId], references: [id])
   orderItems      OrderItem[]
   subtotal        Float
@@ -158,6 +158,6 @@ model Order {
 }
 
 model Analyze {
-  id       Int @id @default(autoincrement())
+  id       String @id @default(uuid())
   visitors Int
 }

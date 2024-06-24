@@ -126,7 +126,7 @@ export const updateProduct = asyncHandler(async (req, res, next) => {
     length,
     supplierId,
     addedDates,
-  }: ProductProps & { id: number } = value;
+  }: ProductProps & { id: string } = value;
 
   const product = await prisma.product.findUnique({ where: { id } });
 
@@ -179,13 +179,13 @@ export const deleteProduct = asyncHandler(async (req, res, next) => {
   if (!id) return next(new ErrorResponse("Product ID is required", 400));
 
   const product = await prisma.product.findUnique({
-    where: { id: Number(id) },
+    where: { id: id },
   });
   if (!product) return next(new ErrorResponse("Product isn't existed", 404));
 
-  await prisma.images.deleteMany({ where: { productId: Number(id) } });
+  await prisma.images.deleteMany({ where: { productId: id } });
 
-  await prisma.product.delete({ where: { id: Number(id) } });
+  await prisma.product.delete({ where: { id: id } });
 
   res.status(204).json({ message: "Product deleted successfully!" });
 });
@@ -202,7 +202,7 @@ export const getAProduct = asyncHandler(async (req, res, next) => {
   if (!id) return next(new ErrorResponse("Please provide an id.", 400));
 
   const product = await prisma.product.findUnique({
-    where: { id: Number(id) },
+    where: { id: id },
   });
 
   if (!product)
@@ -212,7 +212,7 @@ export const getAProduct = asyncHandler(async (req, res, next) => {
 });
 
 export const getProductByCategory = asyncHandler(async (req, res, next) => {
-  const categoryId = req.params;
+  const { categoryId } = req.body;
 
   if (!categoryId)
     return next(
@@ -223,7 +223,7 @@ export const getProductByCategory = asyncHandler(async (req, res, next) => {
     );
 
   const category = await prisma.category.findUnique({
-    where: { id: Number(categoryId) },
+    where: { id: categoryId },
   });
 
   if (!category)

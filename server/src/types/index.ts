@@ -14,10 +14,10 @@ export interface ProductProps {
   name: string;
   sku: string;
   brand: string;
-  categoryId: number;
+  categoryId: string;
   description: string;
-  costPrice: string;
-  sellPrice: string;
+  costPrice: number;
+  sellPrice: number;
   images: string[];
   quantityInStock: number;
   weight: string;
@@ -30,7 +30,7 @@ export interface ProductProps {
   width: string;
   height: string;
   length: string;
-  supplierId: number;
+  supplierId: string;
   addedDates: Date;
 }
 
