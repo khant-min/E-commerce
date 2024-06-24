@@ -7,24 +7,28 @@ import Register from "./containers/register/Register";
 import AppContainer from "./hoc/AppContainer";
 import Checkout from "./containers/checkout/Checkout";
 import Profile from "./containers/profile/Profile";
-import OrderHistory from "./containers/OrderHistory/OrderHistory";
-import Order from "./containers/checkout/Order";
+import OrderHistory from "./containers/order/OrderHistory";
+import Order from "./containers/order/Order";
+import RequireAuth from "./components/auth/RequireAuth";
 
 export default function App() {
   return (
-    <div className="">
+    <div>
       <Routes>
         <Route path="/register" element={<Register />} />
         <Route path="/login" element={<Login />} />
         <Route path="/" element={<AppContainer />}>
-          {/* these guys will be rendered in the place of Outlet */}
           <Route index element={<Home />} />
           <Route path="/products" element={<Products />} />
-          <Route path="/checkout" element={<Checkout />} />
-          <Route path="/order" element={<Order />} />
           <Route path="/products/:id" element={<ProductDetail />} />
-          <Route path="/profile" element={<Profile />} />
           <Route path="/order-history" element={<OrderHistory />} />
+
+          {/* Protected routes */}
+          <Route element={<RequireAuth />}>
+            <Route path="/profile" element={<Profile />} />
+            <Route path="/checkout" element={<Checkout />} />
+            <Route path="/order" element={<Order />} />
+          </Route>
         </Route>
       </Routes>
     </div>
