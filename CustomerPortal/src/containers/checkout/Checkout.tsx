@@ -15,16 +15,19 @@ import {
 } from "@chakra-ui/react";
 import { MdDelete } from "react-icons/md";
 import { IoMdArrowRoundBack } from "react-icons/io";
-import { useEffect, useState } from "react";
-import { CartContextProps, Product, useCart } from "../CartProvider";
+import { useEffect, useRef, useState } from "react";
+import {
+  CartContextProps,
+  Product,
+  useCart,
+} from "../../contexts/CartProvider";
 import ModalForm from "../../components/modal/Modal,";
 import { useNavigate } from "react-router-dom";
 
 export default function Checkout() {
   const navigate = useNavigate();
-  const [orderedItems, setOrderedItems] = useState<Product[]>(
-    JSON.parse(localStorage.getItem("cart")!)
-  );
+  const isInitialMount = useRef(true);
+  const [orderedItems, setOrderedItems] = useState<Product[]>([]);
   const { removeFromCart } = useCart() as CartContextProps;
   const { isOpen, onOpen, onClose } = useDisclosure();
 
@@ -38,24 +41,37 @@ export default function Checkout() {
   }
 
   const addQuantity = (id: number) => {
-    setOrderedItems((prev) => {
-      prev.find((item) => item.id === id)?.quantity! + 1;
-      return prev;
-    });
+    setOrderedItems((prevCart) =>
+      prevCart.map((item) =>
+        item.id === id ? { ...item, quantity: item.quantity + 1 } : item
+      )
+    );
   };
 
   const subtractQuantity = (id: number) => {
-    setOrderedItems((prev) => {
-      const num = prev.find((item) => item.id === id)?.quantity! - 1;
-      return prev;
-    });
+    setOrderedItems((prevCart) =>
+      prevCart.map((item) =>
+        item.id === id && item.quantity > 1
+          ? { ...item, quantity: item.quantity - 1 }
+          : item
+      )
+    );
   };
 
-  // useEffect(() => {
-  //   setOrderedItems(JSON.parse(localStorage.getItem("cart")!));
-  // }, [orderedItems]);
+  useEffect(() => {
+    const storedCart = localStorage.getItem("cart");
+    if (storedCart) {
+      setOrderedItems(JSON.parse(storedCart));
+    }
+  }, []);
 
-  // useEffect(() => {}, [orderedItems.quantity]);
+  useEffect(() => {
+    if (isInitialMount.current) {
+      isInitialMount.current = false;
+    } else {
+      localStorage.setItem("cart", JSON.stringify(orderedItems));
+    }
+  }, [orderedItems]);
 
   return (
     <>

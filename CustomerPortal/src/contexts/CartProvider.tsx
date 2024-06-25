@@ -14,7 +14,7 @@ export interface CartContextProps {
   addToCart: (product: Product) => void;
   removeFromCart: (productId: number) => void;
   clearCart: () => void;
-  itemCountInCart: number;
+  // itemCountInCart: number;
 }
 
 const CartContext = createContext<CartContextProps | null>(null);
@@ -36,7 +36,8 @@ export const CartProvider: React.FC<{ children: React.ReactNode }> = ({
   }, [cart]);
 
   const addToCart = (product: Product) => {
-    setCart((prevCart) => {
+    const prevCart: Product[] = JSON.parse(localStorage.getItem("cart")!);
+    setCart(() => {
       const existingProduct = prevCart.find((item) => item.id === product.id);
       if (existingProduct) {
         return prevCart.map((item) =>
@@ -57,11 +58,9 @@ export const CartProvider: React.FC<{ children: React.ReactNode }> = ({
     setCart([]);
   };
 
-  const itemCountInCart = cart.length;
-
   return (
     <CartContext.Provider
-      value={{ cart, addToCart, removeFromCart, clearCart, itemCountInCart }}
+      value={{ cart, addToCart, removeFromCart, clearCart }}
     >
       {children}
     </CartContext.Provider>

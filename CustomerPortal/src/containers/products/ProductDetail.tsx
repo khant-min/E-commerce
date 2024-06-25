@@ -17,7 +17,7 @@ import { motion } from "framer-motion";
 import { useState } from "react";
 import { IoMdArrowRoundBack } from "react-icons/io";
 import { FaShoppingCart } from "react-icons/fa";
-import { CartContextProps, useCart } from "../CartProvider";
+import { CartContextProps, useCart } from "../../contexts/CartProvider";
 import AuthModal from "../../components/auth/AuthModal";
 
 const ProductDetail = () => {
@@ -31,6 +31,7 @@ const ProductDetail = () => {
   const user = JSON.parse(localStorage.getItem("user")!);
 
   const handleAddToCart = () => {
+    console.log("product: ", product);
     if (!user) return onOpen();
 
     addToCart({
@@ -112,7 +113,7 @@ const ProductDetail = () => {
               {product.description}
             </Text>
             <Text fontWeight="bold" fontSize="xl" color="teal.600">
-              {product.sellPrice} $
+              {product.sellPrice} Ks
             </Text>
 
             <Grid templateColumns="repeat(2, 1fr)" gap={4} w="full">

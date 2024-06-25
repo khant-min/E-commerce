@@ -11,15 +11,23 @@ import {
   useToast,
 } from "@chakra-ui/react";
 import { Input } from "@chakra-ui/react";
-import { CartContextProps, useCart } from "../../containers/CartProvider";
+import { CartContextProps, useCart } from "../../contexts/CartProvider";
 import UserService from "../../services/UserService";
+import { useEffect, useState } from "react";
 
 const categorieslist = ["Electrinies", "Fruits", "Vegetables"];
 
 export default function Header() {
   const navigate = useNavigate();
   const toast = useToast();
-  const { itemCountInCart } = useCart() as CartContextProps;
+  // const { cart } = useCart() as CartContextProps;
+  // const [cart, setCart] = useState([]);
+
+  const cart = JSON.parse(localStorage.getItem("cart")!);
+
+  // useEffect(() => {
+  //   setCart(JSON.parse(localStorage.getItem("cart")!));
+  // }, [localStorage.getItem("cart")]);
 
   const logout = async () => {
     const user = JSON.parse(localStorage.getItem("user")!);
@@ -130,7 +138,7 @@ export default function Header() {
                   aria-label="Shopping Cart"
                   variant="outline"
                 />
-                {itemCountInCart > 0 && (
+                {cart.length > 0 && (
                   <Badge
                     position="absolute"
                     top="-1"
@@ -139,7 +147,7 @@ export default function Header() {
                     px="2"
                     colorScheme="red"
                   >
-                    {itemCountInCart}
+                    {cart.length}
                   </Badge>
                 )}
               </Box>

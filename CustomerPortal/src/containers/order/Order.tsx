@@ -68,7 +68,7 @@ export default function Order() {
         isClosable: true,
         position: "top-right",
       });
-      localStorage.removeItem("cart");
+      localStorage.setItem("cart", JSON.stringify([]));
     } else {
       toast({
         title: "Ordered failed.",

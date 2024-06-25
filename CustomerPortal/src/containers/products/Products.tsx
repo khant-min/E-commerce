@@ -29,6 +29,7 @@ export default function Products() {
         {products.length ? (
           products.map((product) => (
             <Box
+              key={product.id}
               onClick={() => navigate(`/products/${1}`, { state: product })}
               maxW="sm"
               borderWidth="1px"
