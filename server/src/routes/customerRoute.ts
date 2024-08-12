@@ -4,7 +4,7 @@ import { verifyAdmin } from "../middleware/authHandler";
 
 const router = Router();
 
-router.use("/", verifyAdmin);
+// router.use("/", verifyAdmin);
 
 router.get("/", customerController.getAllCustomers);
 

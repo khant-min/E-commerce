@@ -13,9 +13,14 @@ export const getOrderHistory = asyncHandler(async (req, res, next) => {
     return next(new ErrorResponse("This user doesn't exist.", 401));
 
   const orders = await prisma.order.findMany({
+    where: { customerId: userId },
     select: {
+      id: true,
       orderDate: true,
       orderStatus: true,
+      orderNotes: true,
+      paymentMethod: true,
+      totalAmount: true,
       orderItems: {
         select: {
           id: true,
@@ -39,6 +44,19 @@ export const getAllOrders = asyncHandler(async (req, res, next) => {
   res.status(200).json(orders);
 });
 
+/**
+ * Get A Product Customer Choose
+ * @route GET api/products/:id
+ * @access public (All)
+ * @returns chosen product
+ */
+
+/**
+ *  Called when an order requested
+ *  @route Post | api/orders
+ *  @access private (Customer)
+ *  @returns sends an order message to email
+ */
 export const createAnOrder = asyncHandler(async (req, res, next) => {
   const {
     userId: customerId,
@@ -52,7 +70,6 @@ export const createAnOrder = asyncHandler(async (req, res, next) => {
     return next(new ErrorResponse("Order items are required", 400));
   }
 
-  let totalPrice = 0;
   let subtotal = 0;
   let taxes = 0;
   let shoppingFee = 2000;
@@ -71,6 +88,16 @@ export const createAnOrder = asyncHandler(async (req, res, next) => {
       );
     }
 
+    // Check if there is enough stock
+    if (product.quantityInStock < item.quantity) {
+      return next(
+        new ErrorResponse(
+          `Not enough stock for product with id ${item.productId}`,
+          400
+        )
+      );
+    }
+
     calculatedOrderItems.push({
       productId: item.productId,
       quantity: item.quantity,
@@ -80,7 +107,14 @@ export const createAnOrder = asyncHandler(async (req, res, next) => {
 
     subtotal += product.sellPrice * item.quantity;
     taxes += subtotal * 0.05;
+
+    // Subtract the ordered quantity from the stock
+    await prisma.product.update({
+      where: { id: item.productId },
+      data: { quantityInStock: product.quantityInStock - item.quantity },
+    });
   }
+
   const totalAmount =
     subtotal +
     shippingCost +
@@ -88,7 +122,7 @@ export const createAnOrder = asyncHandler(async (req, res, next) => {
     shoppingFee -
     (subtotal * discounts) / 100;
 
-  await prisma.order.create({
+  const newOrder = await prisma.order.create({
     data: {
       orderStatus: "PROCESSING",
       customerId,
@@ -110,6 +144,8 @@ export const createAnOrder = asyncHandler(async (req, res, next) => {
       },
     },
   });
+
+  console.log("New order created: ", newOrder);
 
   res.status(201).json({ message: "New order created" });
 });

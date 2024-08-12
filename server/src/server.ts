@@ -36,7 +36,7 @@ router.use("/services", serviceRoute);
 // router.use(verifyToken);
 router.use("/products", productRoute);
 router.use("/customers", customerRoute);
-router.use("/categories", categoryRoute);
+router.use("/categories", categoryRoute); 
 router.use("/suppliers", supplierRoute);
 router.use("/analyze", analyzeRoute);
 router.use("/orders", orderRoute);
