@@ -3,7 +3,7 @@ import ApiService from "./ApiService";
 class OrderService {
   async getList(payload = {}) {
     try {
-      const res = await ApiService.call("/api/orders", "POST", payload);
+      const res = await ApiService.call("/api/orders/history", "POST", payload);
 
       console.log(res);
 

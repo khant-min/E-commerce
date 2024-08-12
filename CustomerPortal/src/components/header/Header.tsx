@@ -14,14 +14,21 @@ import { Input } from "@chakra-ui/react";
 import { CartContextProps, useCart } from "../../contexts/CartProvider";
 import UserService from "../../services/UserService";
 import { useEffect, useState } from "react";
+import axios from "axios";
+import CategoryService from "../../services/CategoryService";
 
-const categorieslist = ["Electrinies", "Fruits", "Vegetables"];
+interface CategoryList {
+  id: number;
+  name: string;
+  description: string;
+}
 
 export default function Header() {
   const navigate = useNavigate();
   const toast = useToast();
   // const { cart } = useCart() as CartContextProps;
   // const [cart, setCart] = useState([]);
+  const [categoryList, setCategoryList] = useState<CategoryList[]>([]);
 
   const cart = JSON.parse(localStorage.getItem("cart")!);
 
@@ -56,6 +63,19 @@ export default function Header() {
       });
     }
   };
+
+  const fetchData = async () => {
+    const res = await CategoryService.getList();
+    setCategoryList(res.data);
+  };
+
+  const fetchProducts = async (categoryId: number) => {
+    const res = await CategoryService.getProductListByCategoryId(categoryId);
+  };
+
+  useEffect(() => {
+    fetchData();
+  }, []);
 
   return (
     <div className="flex justify-between  items-center p-4 shadow-lg">
@@ -95,16 +115,17 @@ export default function Header() {
                 w="200px"
               >
                 <Box p={2}>
-                  {categorieslist.map((category) => (
+                  {categoryList.map((category) => (
                     <Link
+                      key={category.id}
                       as={RouterLink}
-                      to={`/${category}`}
+                      to={`/products?category=${category.id}`}
                       display="block"
                       px={4}
                       py={2}
                       _hover={{ bg: "gray.100" }}
                     >
-                      {category}
+                      {category.name}
                     </Link>
                   ))}
                 </Box>
@@ -116,8 +137,12 @@ export default function Header() {
 
       {localStorage.getItem("user") === null ? (
         <Box className="flex gap-2">
-          <Button onClick={() => navigate("/register")}>Register</Button>
-          <Button onClick={() => navigate("/login")}>Login</Button>
+          <Button colorScheme="blue" onClick={() => navigate("/register")}>
+            Register
+          </Button>
+          <Button colorScheme="blue" onClick={() => navigate("/login")}>
+            Login
+          </Button>
         </Box>
       ) : (
         <div className="flex justify-between items-center gap-10">
