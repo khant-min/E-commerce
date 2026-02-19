@@ -106,6 +106,7 @@ export const getOTPCode = asyncHandler(async (req, res, next) => {
       message: "We've sent an OTP code to your email, please check...",
     });
   } catch (err) {
+    console.log(err);
     return next(new ErrorResponse("Nodemailer error", 500));
   }
 });

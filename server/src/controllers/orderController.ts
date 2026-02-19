@@ -1,6 +1,7 @@
 import asyncHandler from "../middleware/asyncHandler";
 import ErrorResponse from "../utils/errorResponse";
 import prisma from "../utils/prisma";
+import MailService from "../utils/mail";
 
 export const getOrderHistory = asyncHandler(async (req, res, next) => {
   const { userId } = req.body;
@@ -45,13 +46,6 @@ export const getAllOrders = asyncHandler(async (req, res, next) => {
 });
 
 /**
- * Get A Product Customer Choose
- * @route GET api/products/:id
- * @access public (All)
- * @returns chosen product
- */
-
-/**
  *  Called when an order requested
  *  @route Post | api/orders
  *  @access private (Customer)
@@ -65,6 +59,15 @@ export const createAnOrder = asyncHandler(async (req, res, next) => {
     paymentMethod,
     orderNotes,
   } = req.body;
+
+  if (!customerId || !shippingAddress || !paymentMethod || !orderNotes)
+    return next(new ErrorResponse("Please fill requried fields", 400));
+
+  const foundCustomer = await prisma.customer.findUnique({
+    where: { id: customerId },
+  });
+
+  if (!foundCustomer) return next(new ErrorResponse("User not found!", 401));
 
   if (!orderItems || orderItems.length === 0) {
     return next(new ErrorResponse("Order items are required", 400));
@@ -147,5 +150,30 @@ export const createAnOrder = asyncHandler(async (req, res, next) => {
 
   console.log("New order created: ", newOrder);
 
-  res.status(201).json({ message: "New order created" });
+  const message = {
+    from: process.env.EMAIL,
+    to: foundCustomer.email,
+    subject: "OTP Code",
+    html: MailService.voucherGenerator(
+      foundCustomer.name,
+      `Your have bought ${orderItems.length} items and cost ${totalAmount}. Thanks for your purchases`,
+      orderItems.map((item: any) => ({
+        productId: item.productId,
+        quantity: item.quantity,
+        price: item.unitPrice,
+        totalPrice: item.quantity * item.unitPrice,
+      }))
+    ),
+  };
+
+  try {
+    await MailService.transporter.sendMail(message);
+    console.log("Mail sent...");
+    res.status(201).json({
+      message: "We've sent an voucher to your email, please check...",
+    });
+  } catch (err) {
+    console.log(err);
+    return next(new ErrorResponse("Nodemailer error", 500));
+  }
 });

@@ -19,6 +19,33 @@ class MailService {
       body: { name, intro: `Your OTP code is ${code}` },
     });
   }
+
+  voucherGenerator(name: string, intro: string, tableRows: any) {
+    return this.mail.generate({
+      body: {
+        name,
+        intro,
+        table: {
+          data: [
+            {
+              header: "Here is your items: ",
+              rows: [
+                {
+                  columns: [
+                    { value: "Item", colspan: 1 },
+                    { value: "Count", colspan: 1 },
+                    { value: "Price", colspan: 1 },
+                    { value: "Total", colspan: 1 },
+                  ],
+                },
+                { rows: tableRows },
+              ],
+            },
+          ],
+        },
+      },
+    });
+  }
 }
 
 export default new MailService();

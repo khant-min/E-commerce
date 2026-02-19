@@ -5,6 +5,9 @@ import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
+import { useEffect, useState } from "react";
+import CustomerService from "../../services/CustomerService";
+import { Avatar } from "@mui/material";
 
 function createData(
   id: number,
@@ -52,38 +55,65 @@ const rows = [
   ),
 ];
 
+interface Customer {
+  id: string;
+  name: string;
+  email: string;
+  phoneNumber: string;
+  createdAt: string;
+  updatedAt: string;
+}
+
 export default function CustomersPage() {
+  const [customers, setCustomers] = useState<Customer[]>([]);
+
+  const fetchData = async () => {
+    const res = await CustomerService.getList();
+    setCustomers(res.data.customers);
+  };
+
+  useEffect(() => {
+    fetchData();
+  }, []);
+
   return (
     <TableContainer component={Paper}>
       <Table sx={{ minWidth: 1000 }} aria-label="customer table">
         <TableHead>
           <TableRow>
-            <TableCell>ID</TableCell>
+            {/* <TableCell>ID</TableCell> */}
+            <TableCell align="right">Profile</TableCell>
             <TableCell align="right">Name</TableCell>
             <TableCell align="right">Email</TableCell>
             <TableCell align="right">Phone No</TableCell>
-            <TableCell align="right">Active</TableCell>
-            <TableCell align="right">Profile</TableCell>
+            {/* <TableCell align="right">Active</TableCell> */}
             <TableCell align="right">Created At</TableCell>
             <TableCell align="right">Updated At</TableCell>
           </TableRow>
         </TableHead>
         <TableBody>
-          {rows.map(row => (
+          {customers.map((customer) => (
             <TableRow
-              key={row.id}
+              key={customer.id}
               sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
             >
-              <TableCell component="th" scope="row">
-                {row.id}
+              {/* <TableCell component="th" scope="row">
+                {customer.id}
+              </TableCell> */}
+              <TableCell align="right">
+                <Avatar alt={customer.name} />
               </TableCell>
-              <TableCell align="right">{row.name}</TableCell>
-              <TableCell align="right">{row.email}</TableCell>
-              <TableCell align="right">{row.phoneNo}</TableCell>
-              <TableCell align="right">{row.active.toString()}</TableCell>
-              <TableCell align="right">{row.profile}</TableCell>
-              <TableCell align="right">{row.createdAt}</TableCell>
-              <TableCell align="right">{row.updatedAt}</TableCell>
+              <TableCell align="right">{customer.name}</TableCell>
+              <TableCell align="right">{customer.email}</TableCell>
+              <TableCell align="right">{customer.phoneNumber}</TableCell>
+              {/* <TableCell align="right">{row.active.toString()}</TableCell> */}
+              <TableCell align="right">
+                {" "}
+                {new Date(customer.createdAt).toISOString().split("T")[0]}
+              </TableCell>
+              <TableCell align="right">
+                {new Date(customer.updatedAt).toISOString().split("T")[0]}
+              </TableCell>
             </TableRow>
           ))}
         </TableBody>

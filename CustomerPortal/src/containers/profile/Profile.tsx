@@ -16,13 +16,9 @@ const MotionAvatar = motion(Avatar);
 
 export default function Profile() {
   const user = JSON.parse(localStorage.getItem("user")!);
-  const getInitials = user.name
-    .split(" ")
-    .map((n: string) => n.charAt(0).toUpperCase())
-    .join("");
 
   return (
-    <Box className="mt-20">
+    <Box className="my-20">
       <Stack align="center" spacing={4}>
         <MotionAvatar
           size="2xl"

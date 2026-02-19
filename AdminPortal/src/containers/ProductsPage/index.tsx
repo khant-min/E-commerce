@@ -1,12 +1,14 @@
 import { useEffect, useState } from "react";
 import ProductService from "../../services/ProductService";
-import { Button } from "@mui/material";
+import { Badge, Box, Button } from "@mui/material";
+import { Image } from "@mui/icons-material";
 
 export default function Product() {
   const [products, setProducts] = useState([]);
 
   const fetchData = async () => {
     const res = await ProductService.getList();
+    console.log("res: ", res);
     setProducts(res.data);
   };
 
@@ -16,20 +18,49 @@ export default function Product() {
   return (
     <div>
       {products ? (
-        <div className="flex items-center justify-between flex-wrap gap-10">
+        <div className="">
           {products.map((product: any) => (
-            <div className="" key={product.id}>
-              <img className="w-80" src={product.image} alt={product.name} />
-              <h5>{product.name}</h5>
-              <p>{product.description}</p>
-              <span>${product.price}</span>
-              <div>
-                <Button variant="contained">Edit</Button>
-                <Button variant="contained" color="error">
-                  Delete
-                </Button>
-              </div>
-            </div>
+            <Box
+              key={product.id}
+              //  onClick={() =>
+              //    navigate(`/products/${product.id}`, { state: product })
+              //  }
+              //  maxW="sm"
+              //  borderWidth="1px"
+              //  borderRadius="lg"
+              //  overflow="hidden"
+              className="flex flex-col items-start justify-center flex-shrink-0 p-2 hover:scale-105 transition-all"
+            >
+              <Image href={product.images[0].image} />
+
+              <Box p="6">
+                <Box display="flex" alignItems="baseline">
+                  <Badge>New</Badge>
+                  <Box
+                    color="gray.500"
+                    fontWeight="semibold"
+                    letterSpacing="wide"
+                    fontSize="xs"
+                    textTransform="uppercase"
+                    ml="2"
+                  >
+                    {product.name}
+                  </Box>
+                </Box>
+
+                <Box
+                // mt="1"
+                // fontWeight="semibold"
+                // as="h4"
+                // lineHeight="tight"
+                // isTruncated
+                >
+                  {product.description}
+                </Box>
+
+                <Box>{product.sellPrice} $</Box>
+              </Box>
+            </Box>
           ))}
         </div>
       ) : (

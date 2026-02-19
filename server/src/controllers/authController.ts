@@ -114,7 +114,7 @@ export const logoutCustomer = asyncHandler(async (req, res, next) => {
     data: { refreshToken: "" },
   });
 
-  res.status(200).json({ message: "Logout successfully" });
+  res.status(200).json({ message: "Logout successful" });
 });
 
 /**
