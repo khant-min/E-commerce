@@ -10,7 +10,9 @@ import {
 import { useForm } from "react-hook-form";
 import { Link, useNavigate } from "react-router-dom";
 import UserService from "../../services/UserService";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
+import { FiEyeOff } from "react-icons/fi";
+import { BsEye } from "react-icons/bs";
 
 export default function Register() {
   const navigate = useNavigate();
@@ -20,6 +22,8 @@ export default function Register() {
     handleSubmit,
     formState: { errors },
   } = useForm();
+  const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmedPassword, setShowConfirmedPassword] = useState(false);
 
   const onSubmit = async (data: any) => {
     if (data.password !== data.confirmPassword) {
@@ -122,10 +126,17 @@ export default function Register() {
           <FormControl id="password" isInvalid={!!errors.password}>
             <FormLabel>Password</FormLabel>
             <Input
-              type="password"
+              type={showPassword ? "text" : "password"}
               {...register("password", { required: "Password is required" })}
               placeholder="Enter your password"
             />
+            <button
+              type="button"
+              onClick={() => setShowPassword(!showPassword)}
+              className="absolute right-3 top-10  text-gray-500"
+            >
+              {showPassword ? <FiEyeOff size={18} /> : <BsEye size={18} />}
+            </button>
           </FormControl>
 
           <FormControl
@@ -134,12 +145,23 @@ export default function Register() {
           >
             <FormLabel>Confirm Password</FormLabel>
             <Input
-              type="password"
+              type={showConfirmedPassword ? "text" : "password"}
               {...register("confirmPassword", {
                 required: "Confirm Password is required",
               })}
               placeholder="Enter your password again"
             />
+            <button
+              type="button"
+              onClick={() => setShowConfirmedPassword(!showConfirmedPassword)}
+              className="absolute right-3 top-10  text-gray-500"
+            >
+              {showConfirmedPassword ? (
+                <FiEyeOff size={18} />
+              ) : (
+                <BsEye size={18} />
+              )}
+            </button>
           </FormControl>
 
           <Button colorScheme="blue" type="submit">

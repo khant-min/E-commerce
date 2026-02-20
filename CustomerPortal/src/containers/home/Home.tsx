@@ -13,9 +13,9 @@ function HeroSection() {
             All in one convenient place. Start your shopping journey now and
             enjoy the best online shopping experience.
           </Text>
-          <Button colorScheme="blue">
-            <Link to="/products">Start Shopping</Link>
-          </Button>
+          <Link to="/products">
+            <Button colorScheme="blue">Start Shopping</Button>
+          </Link>
         </Box>
         <Box className="w-full md:w-1/2 p-4">
           <Image
